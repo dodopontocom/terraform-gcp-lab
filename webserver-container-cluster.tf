@@ -16,6 +16,7 @@ resource "google_container_node_pool" "np" {
 resource "google_container_cluster" "primary" {
   name                = "gke-tf-${random_id.instance_id.hex}"
   zone                = "us-central1-a"
+  machine_type        = "f1-micro"
   initial_node_count  = 3
   
   addons_config {
