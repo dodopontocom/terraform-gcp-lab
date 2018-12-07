@@ -1,3 +1,6 @@
+resource "random_id" "instance_id" {
+  byte_length = 6
+}
 resource "google_container_node_pool" "np" {
   name       = "node-pool-tf-${random_id.instance_id.hex}"
   zone       = "us-central1-a"
