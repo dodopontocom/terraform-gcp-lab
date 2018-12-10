@@ -51,3 +51,6 @@ terraform() {
     docker run --rm -it -v ${PWD}:/home -w /home hashicorp/terraform:latest $1
 }
 terraform $2
+cd -
+
+#endscript
