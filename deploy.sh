@@ -45,7 +45,7 @@ if [ -z "$1" ]; then
         docker run --rm -it -v ${PWD}:/home -w /home hashicorp/terraform $1
     }
     terraform $2
-    cd -
+    cd - >/dev/null 2>&1
 fi
 
 #endscript
