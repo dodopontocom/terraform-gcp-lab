@@ -4,15 +4,16 @@
 # requirement: docker
 # https://hub.docker.com/r/hashicorp/terraform/
 
+export AWS_ACCESS_KEY_ID=""
+export AWS_SECRET_ACCESS_KEY=""
+export AWS_DEFAULT_REGION="us-west-1"
+
 if [ -z "$1" ]; then
   echo "Usage: must pass the terraform directory"
-  exit 1
-fi
-
-if [ -z "$2" ]; then
-  echo "Usage: must pass the terraform command as second parameter"
-  echo -e "
-  Common commands:
+  elif [ -z "$2" ]; then
+    echo "Usage: must pass the terraform command as second parameter"
+    echo -e "
+    Common commands:
     apply              Builds or changes infrastructure
     console            Interactive console for Terraform interpolations
     destroy            Destroy Terraform-managed infrastructure
@@ -34,23 +35,17 @@ if [ -z "$2" ]; then
     version            Prints the Terraform version
     workspace          Workspace management
 
-  All other commands:
+    All other commands:
     debug              Debug output management (experimental)
     force-unlock       Manually unlock the terraform state
     state              Advanced state management"
-  
-  exit 1
+  else
+    cd $1
+    terraform() {
+        docker run --rm -it -v ${PWD}:/home -w /home hashicorp/terraform $1
+    }
+    terraform $2
+    cd -
 fi
-
-export AWS_ACCESS_KEY_ID=""
-export AWS_SECRET_ACCESS_KEY=""
-export AWS_DEFAULT_REGION="us-west-1"
-
-cd $1
-terraform() {
-    docker run --rm -it -v ${PWD}:/home -w /home hashicorp/terraform:latest $1
-}
-terraform $2
-cd -
 
 #endscript
