@@ -1,0 +1,39 @@
+version: 2.1
+defaults: &defaults
+  environment:
+    GCLOUD_PRODJECT_ID: ""
+only-releasable: &only-releasable
+  filters:
+    branches:
+      only:
+        - master
+        - develop
+        - patch
+non-releasable: &non-releasable
+  filters:
+    branches:
+      ignore:
+        - master
+        - develop
+        - patch
+
+jobs:
+  test:
+    <<: *defaults
+    docker:
+      - image: node
+    working_directory: $PROJECT_TEST
+    steps:
+      - checkout
+      - run:
+          name: "python test"
+          command: |
+            cd $PROJECT_TEST
+            python --version
+workflows:
+  version: 2.1
+  
+  tensorflow_workflow:
+    jobs:
+      - test:
+        <<: *non-releasable
