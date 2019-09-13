@@ -42,6 +42,7 @@ terraform-template: &terraform-template
         command: |
           . .circleci/definitions.sh
           echo "GCLOUD_DEVOPS_SA_PATH: ${GCLOUD_DEVOPS_SA_PATH}"
+          echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA_PATH}
           ls -lrt ${GCLOUD_DEVOPS_SA_PATH}
           echo ${GCP_SA} # > ${GCLOUD_DEVOPS_SA_PATH}
           #cd ${TERRAFORM_STR}
