@@ -19,6 +19,8 @@ non-releasable: &non-releasable
         - develop
         - patch
 gcp-account-template: &gcp-account-template
+  docker:
+    - image: google/cloud-sdk
   steps:
     - checkout
     - run:
@@ -28,12 +30,14 @@ gcp-account-template: &gcp-account-template
           export GOOGLE_APPLICATION_CREDENTIALS=$(echo ${GCP_SA})
           gcloud config set project ${GCLOUD_PRODJECT_ID}
           gsutil ls gs://${TF_GCP_BUCKET}/ || true
+terraform-template: &terraform-template
+  docker:
+    - image: hashicorp/terraform:light
+    working_directory: terraform
+
 jobs:
   test_gcp_sa_account:
     <<: *defaults
-    docker:
-      - image: google/cloud-sdk
-    working_directory: terraform
     <<: *gcp-account-template
 
 workflows:
