@@ -29,7 +29,7 @@ gcp-account-template: &gcp-account-template
         name: "validate gcp service account"
         command: |
           . .circleci/definitions.sh
-          echo ${GCP_SA} > GCLOUD_DEVOPS_SA_PATH
+          echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA_PATH}
           export GOOGLE_APPLICATION_CREDENTIALS=${GCLOUD_DEVOPS_SA_PATH}
           gcloud config set project ${GCLOUD_PRODJECT_ID}
           gsutil ls gs://${TF_GCP_BUCKET}/
