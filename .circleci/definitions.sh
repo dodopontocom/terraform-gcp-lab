@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASEDIR="$(cd $(dirname ${BASH_SOURCE[0]})/../ >/dev/null 2>&1 && pwd )"
+CIRCLE_CI_BASEDIR="/root/project/"
 
 export GCLOUD_DEVOPS_SA="$(find ${BASEDIR} -iname ".gcp-credentials")/credential.json"
 
