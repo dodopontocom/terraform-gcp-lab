@@ -31,7 +31,7 @@ gcp-account-template: &gcp-account-template
           . .circleci/definitions.sh
           export GOOGLE_APPLICATION_CREDENTIALS=$(echo ${GCP_SA})
           gcloud config set project ${GCLOUD_PRODJECT_ID}
-          gsutil ls gs://${TF_GCP_BUCKET}/ || true
+          gsutil ls gs://${TF_GCP_BUCKET}/
 terraform-template: &terraform-template
   docker:
     - image: hashicorp/terraform:light
