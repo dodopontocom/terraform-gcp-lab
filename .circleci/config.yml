@@ -45,7 +45,7 @@ terraform-template: &terraform-template
           export GOOGLE_APPLICATION_CREDENTIALS=$(echo ${GCP_SA})
           cd ${TERRAFORM_STR}
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
-          
+
 jobs:
   test_gcp_sa_account:
     <<: *defaults
@@ -59,8 +59,8 @@ workflows:
   GCP_LABS:
     jobs:
       - test_gcp_sa_account:
-          <<: *non-releasable
+        <<: *non-releasable
       - terraform_provisioning:
-          <<: *non-releasable
-          requires:
-            - test_gcp_sa_account
+        <<: *non-releasable
+        requires:
+          - test_gcp_sa_account
