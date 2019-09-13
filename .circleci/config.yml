@@ -48,6 +48,7 @@ jobs:
     <<: *defaults
     <<: *gcp-account-template
   terraform_provisioning:
+    <<: *defaults
     <<: *terraform-template
 
 workflows:
@@ -56,4 +57,6 @@ workflows:
   GCP_LABS:
     jobs:
       - test_gcp_sa_account:
+        <<: *non-releasable
+      - terraform_provisioning:
         <<: *non-releasable
