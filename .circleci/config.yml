@@ -45,8 +45,10 @@ terraform-template: &terraform-template
           echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA_PATH}
           ls -lrt ${GCLOUD_DEVOPS_SA_PATH}
           echo ${GCP_SA} # > ${GCLOUD_DEVOPS_SA_PATH}
-          #cd ${TERRAFORM_STR}
+          cd ${TERRAFORM_STR}
+          ls -lrta
           #terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
+          terraform init
 
 jobs:
   test_gcp_sa_account:
