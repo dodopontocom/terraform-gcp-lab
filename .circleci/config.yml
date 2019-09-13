@@ -47,6 +47,7 @@ jobs:
   test_gcp_sa_account:
     <<: *defaults
     <<: *gcp-account-template
+  terraform_provisioning:
     <<: *terraform-template
 
 workflows:
