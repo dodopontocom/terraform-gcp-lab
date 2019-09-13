@@ -1,7 +1,7 @@
 version: 2.1
 defaults: &defaults
   environment:
-    GCLOUD_PRODJECT_ID: ""
+    GCLOUD_PRODJECT_ID: "gcp-laboratories"
 only-releasable: &only-releasable
   filters:
     branches:
@@ -16,20 +16,21 @@ non-releasable: &non-releasable
         - master
         - develop
         - patch
-
+gcp-account-template: &gcp-account-template
+  steps:
+    - run:
+        name: "validate gcp service account"
+        command: |
+          export GOOGLE_APPLICATION_CREDENTIALS=$(echo ${GCP_SA})
+          gcloud config set project ${GCLOUD_PRODJECT_ID}
 jobs:
-  test:
+  test_gcp_sa_account:
     <<: *defaults
     docker:
-      - image: node
-    working_directory: $PROJECT_TEST
-    steps:
-      - checkout
-      - run:
-          name: "python test"
-          command: |
-            cd $PROJECT_TEST
-            python --version
+      - image: google/cloud-sdk
+    working_directory: "test"
+    <<: *gcp-account-template
+    
 workflows:
   version: 2.1
   
