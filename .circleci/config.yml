@@ -27,7 +27,7 @@ jobs:
   test_gcp_sa_account:
     <<: *defaults
     docker:
-      - image: google/cloud-sdk-alpine
+      - image: google/cloud-sdk
     working_directory: "test"
     <<: *gcp-account-template
     
