@@ -24,10 +24,7 @@ gcp-account-template: &gcp-account-template
     - run:
         name: "validate gcp service account"
         command: |
-          ls -lrta
-          pwd
-          export
-          #. ./.circle-ci/definitions.sh
+          . .circleci/definitions.sh
           export GOOGLE_APPLICATION_CREDENTIALS=$(echo ${GCP_SA})
           gcloud config set project ${GCLOUD_PRODJECT_ID}
           gsutil ls gs://${TF_GCP_BUCKET}/ || true
