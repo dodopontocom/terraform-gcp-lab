@@ -36,5 +36,5 @@ workflows:
   
   GCP_LABS:
     jobs:
-      - test:
+      - test_gcp_sa_account:
         <<: *non-releasable
