@@ -43,6 +43,7 @@ terraform-template: &terraform-template
           . .circleci/definitions.sh
           echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA_PATH}
           cd ${TERRAFORM_STR}
+          ls -lrt .gcp-credentials/
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
 
 jobs:
