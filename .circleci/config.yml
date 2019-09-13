@@ -30,10 +30,11 @@ gcp-account-template: &gcp-account-template
         command: |
           . .circleci/definitions.sh
           echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA}
-          #export GOOGLE_APPLICATION_CREDENTIALS=${GCLOUD_DEVOPS_SA}
           gcloud auth activate-service-account --key-file=${GCLOUD_DEVOPS_SA}
           gcloud config set project ${GCLOUD_PRODJECT_ID}
+          echo "checking bucket..."
           gsutil ls gs://${TF_GCP_BUCKET}/
+          echo "bucket step passed..."
 terraform-template: &terraform-template
   docker:
     - image: hashicorp/terraform:light
@@ -43,9 +44,8 @@ terraform-template: &terraform-template
         name: "terraform provisioning"
         command: |
           . .circleci/definitions.sh
-          echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA_PATH}
+          echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA}
           cd ${TERRAFORM_STR}
-          ls -lrt .gcp-credentials/
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
 
 jobs:
