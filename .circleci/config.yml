@@ -31,8 +31,8 @@ gcp-account-template: &gcp-account-template
         command: |
           . .circleci/definitions.sh
           echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA}
-          export GOOGLE_APPLICATION_CREDENTIALS=${GCLOUD_DEVOPS_SA}
-          gcloud auth activate-service-account ${GCLOUD_SA_NAME}
+          #export GOOGLE_APPLICATION_CREDENTIALS=${GCLOUD_DEVOPS_SA}
+          gcloud auth activate-service-account ${GCLOUD_SA_NAME} --key-file=${GCLOUD_DEVOPS_SA}
           gcloud config set project ${GCLOUD_PRODJECT_ID}
           gsutil ls gs://${TF_GCP_BUCKET}/
 terraform-template: &terraform-template
