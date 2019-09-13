@@ -28,7 +28,7 @@ jobs:
     <<: *defaults
     docker:
       - image: google/cloud-sdk
-    working_directory: "test"
+    working_directory: terraform
     <<: *gcp-account-template
     
 workflows:
