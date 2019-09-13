@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = "${file("account.json")}"
-  project     = "talk-uniso-02"
-  region      = "us-central1"
+  credentials = "${file("${var.service_account_credential_path}")}"
+  project     = "${var.project_id}"
+  region      = "${var.region}"
 }

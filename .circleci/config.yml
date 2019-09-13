@@ -2,6 +2,7 @@ version: 2.1
 defaults: &defaults
   environment:
     GCLOUD_PRODJECT_ID: "gcp-laboratories"
+    GCLOUD_PRODJECT_REGION: "us-central1"
     TF_GCP_BUCKET: "gcp-laboratories-tf-state"
 only-releasable: &only-releasable
   filters:
@@ -19,9 +20,11 @@ non-releasable: &non-releasable
         - patch
 gcp-account-template: &gcp-account-template
   steps:
+    - checkout
     - run:
         name: "validate gcp service account"
         command: |
+          . .circle-ci/definitions.sh
           export GOOGLE_APPLICATION_CREDENTIALS=$(echo ${GCP_SA})
           gcloud config set project ${GCLOUD_PRODJECT_ID}
           gsutil ls gs://${TF_GCP_BUCKET}/ || true
@@ -32,10 +35,10 @@ jobs:
       - image: google/cloud-sdk
     working_directory: terraform
     <<: *gcp-account-template
-    
+
 workflows:
   version: 2.1
-  
+
   GCP_LABS:
     jobs:
       - test_gcp_sa_account:
