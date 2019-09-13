@@ -24,7 +24,7 @@ gcp-account-template: &gcp-account-template
     - run:
         name: "validate gcp service account"
         command: |
-          ls -lrt
+          ls -lrta
           pwd
           export
           #. ./.circle-ci/definitions.sh
