@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export GCLOUD_DEVOPS_SA="./terraform/gcp-credentials/credential.json"
+export GCLOUD_DEVOPS_SA="$(find ../ -iname ".gcp-credentials")/credential.json"
 
 export TF_VAR_project_id="${GCLOUD_PRODJECT_ID}"
 export TF_VAR_region="${GCLOUD_PRODJECT_REGION}"

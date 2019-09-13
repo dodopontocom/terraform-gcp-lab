@@ -4,6 +4,7 @@ defaults: &defaults
   environment:
     GCLOUD_PRODJECT_ID: "gcp-laboratories"
     GCLOUD_PRODJECT_REGION: "us-central1"
+    GCLOUD_SA_NAME: "devops"
     TF_GCP_BUCKET: "gcp-laboratories-tf-state"
     TERRAFORM_STR: "terraform"
 only-releasable: &only-releasable
@@ -29,9 +30,9 @@ gcp-account-template: &gcp-account-template
         name: "validate gcp service account"
         command: |
           . .circleci/definitions.sh
-          ls -lrta
           echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA}
           export GOOGLE_APPLICATION_CREDENTIALS=${GCLOUD_DEVOPS_SA}
+          gcloud auth activate-service-account ${GCLOUD_SA_NAME}
           gcloud config set project ${GCLOUD_PRODJECT_ID}
           gsutil ls gs://${TF_GCP_BUCKET}/
 terraform-template: &terraform-template
