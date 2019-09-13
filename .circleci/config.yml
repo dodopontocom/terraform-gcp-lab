@@ -1,4 +1,5 @@
 version: 2.1
+
 defaults: &defaults
   environment:
     GCLOUD_PRODJECT_ID: "gcp-laboratories"
@@ -44,8 +45,7 @@ terraform-template: &terraform-template
           export GOOGLE_APPLICATION_CREDENTIALS=$(echo ${GCP_SA})
           cd ${TERRAFORM_STR}
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
-
-
+          
 jobs:
   test_gcp_sa_account:
     <<: *defaults
@@ -56,7 +56,6 @@ jobs:
 
 workflows:
   version: 2.1
-
   GCP_LABS:
     jobs:
       - test_gcp_sa_account:
