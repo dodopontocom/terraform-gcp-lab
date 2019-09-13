@@ -33,7 +33,7 @@ jobs:
 workflows:
   version: 2.1
   
-  tensorflow_workflow:
+  GCP_LABS:
     jobs:
       - test:
         <<: *non-releasable
