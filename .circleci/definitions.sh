@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASEDIR="$(dirname $0)"
+BASEDIR="$(cd $(dirname ${BASH_SOURCE[0]})/../ >/dev/null 2>&1 && pwd )"
 echo "basedir: ${BASEDIR}"
 
 export GCLOUD_DEVOPS_SA_PATH=${BASEDIR}/gcp/credentials/credential.json
