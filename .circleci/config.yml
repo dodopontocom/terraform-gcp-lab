@@ -34,7 +34,7 @@ gcp-account-template: &gcp-account-template
 terraform-template: &terraform-template
   docker:
     - image: hashicorp/terraform:light
-  working_directory: ${TERRAFORM_STR}/
+  working_directory: "${TERRAFORM_STR}/"
   steps:
     - checkout
     - run:
