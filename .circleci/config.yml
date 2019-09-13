@@ -39,6 +39,7 @@ terraform-template: &terraform-template
     - run:
         name: "terraform provisioning"
         command: |
+          echo oi
           . .circleci/definitions.sh
           export GOOGLE_APPLICATION_CREDENTIALS=$(echo ${GCP_SA})
           cd ${TERRAFORM_STR}
