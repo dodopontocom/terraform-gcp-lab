@@ -40,6 +40,8 @@ terraform-template: &terraform-template
     - run:
         name: "terraform provisioning"
         command: |
+          ls -lrta
+          echo "working dir: ${CIRCLE_WORKING_DIRECTORY}"
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
 
 
