@@ -4,6 +4,7 @@ defaults: &defaults
     GCLOUD_PRODJECT_ID: "gcp-laboratories"
     GCLOUD_PRODJECT_REGION: "us-central1"
     TF_GCP_BUCKET: "gcp-laboratories-tf-state"
+    TERRAFORM_STR: "terraform"
 only-releasable: &only-releasable
   filters:
     branches:
@@ -33,12 +34,20 @@ gcp-account-template: &gcp-account-template
 terraform-template: &terraform-template
   docker:
     - image: hashicorp/terraform:light
-    working_directory: terraform
+  working_directory: ${TERRAFORM_STR}/
+  steps:
+    - checkout
+    - run:
+        name: "terraform provisioning"
+        command: |
+          terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
+
 
 jobs:
   test_gcp_sa_account:
     <<: *defaults
     <<: *gcp-account-template
+    <<: *terraform-template
 
 workflows:
   version: 2.1
