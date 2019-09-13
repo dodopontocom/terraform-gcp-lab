@@ -43,12 +43,9 @@ terraform-template: &terraform-template
           . .circleci/definitions.sh
           echo "GCLOUD_DEVOPS_SA_PATH: ${GCLOUD_DEVOPS_SA_PATH}"
           echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA_PATH}
-          ls -lrt ${GCLOUD_DEVOPS_SA_PATH}
-          echo ${GCP_SA} # > ${GCLOUD_DEVOPS_SA_PATH}
+          export GOOGLE_APPLICATION_CREDENTIALS=$(echo ${GCP_SA})
           cd ${TERRAFORM_STR}
-          ls -lrta
-          #terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
-          terraform init
+          terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
 
 jobs:
   test_gcp_sa_account:
