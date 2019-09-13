@@ -34,7 +34,6 @@ gcp-account-template: &gcp-account-template
 terraform-template: &terraform-template
   docker:
     - image: hashicorp/terraform:light
-  working_directory: ~/${TERRAFORM_STR}/
   steps:
     - checkout
     - run:
@@ -42,6 +41,7 @@ terraform-template: &terraform-template
         command: |
           ls -lrta
           echo "working dir: ${CIRCLE_WORKING_DIRECTORY}"
+          cd ${TERRAFORM_STR}
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
 
 
