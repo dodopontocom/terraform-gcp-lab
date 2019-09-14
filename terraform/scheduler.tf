@@ -1,7 +1,13 @@
+
+resource "google_app_engine_application" "app" {
+  project     = "${var.project_id}"
+  location_id = "us-central"
+}
+
 resource "google_cloud_scheduler_job" "stop_job" {
   name     = "${var.schedule_stop}"
   description = "stop test job"
-  schedule = "44 20 * * *"
+  schedule = "51 20 * * *"
   time_zone = "America/Sao_Paulo"
 
   pubsub_target {

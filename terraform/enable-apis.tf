@@ -7,8 +7,16 @@ resource "null_resource" "resource-to-wait-on" {
                 "google_project_service.scheduler-api",
                 "google_project_service.pubsub-api",
                 "google_project_service.functions-api",
-                "google_project_service.storage-api"
+                "google_project_service.storage-api",
+                "google_project_service.appengine-api"
                 ]
+}
+
+resource "google_project_service" "appengine-api" {
+  project = "${var.project_id}"
+  service = "appengine.googleapis.com"
+  disable_dependent_services = true
+  disable_on_destroy         = false
 }
 
 resource "google_project_service" "storage-api" {
