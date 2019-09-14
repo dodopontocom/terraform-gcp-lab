@@ -56,10 +56,10 @@ terraform-template: &terraform-template
             terraform apply --auto-approve
           fi
 jobs:
-  Is TF State Bucket Created:
+  tf_state_checker:
     <<: *defaults
     <<: *gcp-bucket-checker-template
-  Terraform Provisioning Step:
+  terraform_provisioning:
     <<: *defaults
     <<: *terraform-template
 
@@ -67,9 +67,9 @@ workflows:
   version: 2.1
   GCP_LABS:
     jobs:
-      - test_gcp_sa_account:
+      - tf_state_checker:
           <<: *only-releasable
       - terraform_provisioning:
           <<: *only-releasable
           requires:
-            - test_gcp_sa_account
+            - tf_state_checker
