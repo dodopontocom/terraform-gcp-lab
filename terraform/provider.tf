@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = "${file(${var.service_account_credential_path})}"
+  credentials = "${file("/root/terraform-gcp-lab/.credentials/credential.jsona")}"
   project     = "${var.project_id}"
   region      = "${var.region}"
 }
