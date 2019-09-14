@@ -36,10 +36,7 @@ gcp-account-template: &gcp-account-template
     - run:
         name: "validate gcp service account"
         command: |
-          pwd
-          ls -lrta .credentials
-          touch ${GCLOUD_DEVOPS_SA}
-          echo "${GCP_SA}" > ${GCLOUD_DEVOPS_SA}
+          echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA}
           gcloud auth activate-service-account --key-file=${GCLOUD_DEVOPS_SA}
           gcloud config set project ${GCLOUD_PRODJECT_ID}
           echo "checking bucket..."
@@ -53,7 +50,6 @@ terraform-template: &terraform-template
     - run:
         name: "terraform provisioning"
         command: |
-          . .circleci/definitions.sh
           echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA}
           cd ${TERRAFORM_STR}
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
