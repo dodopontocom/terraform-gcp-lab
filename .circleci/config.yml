@@ -7,8 +7,6 @@ defaults: &defaults
     TF_VAR_project_id: "gcp-laboratories"
     TF_VAR_region: "us-central1"
     TF_VAR_key: "/root/terraform-gcp-lab/credentials/credential.json"
-    GIT_COMMIT_DESC: "$(git log --format=oneline -n 1 $CIRCLE_SHA1)"
-
   working_directory: /root/terraform-gcp-lab
 only-releasable: &only-releasable
   filters:
@@ -49,7 +47,7 @@ terraform-template: &terraform-template
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
-          echo "-=-=-= ${GIT_COMMIT_DESC}"
+          GIT_COMMIT_DESC="$(git log --format=oneline -n 1 $CIRCLE_SHA1)"
           if [[ $(echo "${GIT_COMMIT_DESC}" | grep -E "\[tf-destroy\]") ]]; then
             terraform destroy --auto-approve
           else
