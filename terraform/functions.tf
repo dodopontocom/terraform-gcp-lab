@@ -10,7 +10,7 @@ resource "google_cloudfunctions_function" "function-start" {
   runtime               = "nodejs8"
   source_archive_bucket = "${var.gcp_bucket}"
   source_archive_object = "${google_storage_bucket_object.function-zip.name}"
-  event_trigger          = topic
+  //trigger_topic          = true
   //entry_point           = "helloGET"
 
   available_memory_mb   = 128
