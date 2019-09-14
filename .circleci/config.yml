@@ -45,7 +45,7 @@ terraform-template: &terraform-template
     - run:
         name: "terraform provisioning"
         command: |
-          pkg add --update && pkg add bash
+          apk add --update && apk add bash
           which bash
           echo ${GCP_SA} > ${TF_VAR_key}
           cd ${TERRAFORM_STR}
