@@ -6,6 +6,13 @@ defaults: &defaults
     GCLOUD_PRODJECT_REGION: "us-central1"
     TF_GCP_BUCKET: "gcp-laboratories-tf-state"
     TERRAFORM_STR: "terraform"
+
+    GCLOUD_DEVOPS_SA: "~/terraform-gcp-lab/.credentials/credential.json"
+
+    TF_VAR_project_id: "${GCLOUD_PRODJECT_ID}"
+    TF_VAR_region: "${GCLOUD_PRODJECT_REGION}"
+    TF_VAR_service_account_credential_path: "${GCLOUD_DEVOPS_SA}"
+
   working_directory: ~/terraform-gcp-lab
 only-releasable: &only-releasable
   filters:
@@ -31,7 +38,6 @@ gcp-account-template: &gcp-account-template
         command: |
           pwd
           ls -lrta
-          /bin/bash .circleci/definitions.sh
           echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA}
           gcloud auth activate-service-account --key-file=${GCLOUD_DEVOPS_SA}
           gcloud config set project ${GCLOUD_PRODJECT_ID}
