@@ -24,23 +24,17 @@ non-releasable: &non-releasable
         - master
         - develop
         - patch
-gcp_credentials: &gcp_credentials
-  - run:
-      name: "Validate GCP credentials"
-      command: |
-        echo ${GCP_SA} > ${TF_VAR_key}
-        export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
-        gcloud auth activate-service-account --key-file=${TF_VAR_key}
-        gcloud config set project ${TF_VAR_project_id}
 gcp-bucket-checker-template: &gcp-bucket-checker-template
   docker:
     - image: google/cloud-sdk
   steps:
     - checkout
-    <<: *gcp_credentials
     - run:
         name: "validate tf state bucket "
         command: |
+          echo ${GCP_SA} > ${TF_VAR_key}
+          gcloud auth activate-service-account --key-file=${TF_VAR_key}
+          gcloud config set project ${TF_VAR_project_id}
           echo "Checking if GCP Bucket is created..."
           gsutil ls gs://${TF_GCP_BUCKET}/
           echo "Bucket step passed!"
@@ -49,12 +43,18 @@ terraform-template: &terraform-template
     - image: hashicorp/terraform:light
   steps:
     - checkout
-    <<: *gcp_credentials
     - run:
         name: "terraform provisioning"
         command: |
+          echo ${GCP_SA} > ${TF_VAR_key}
+          export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
-          if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[tf-destroy\]") ]]; then
+          if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[tf-custom\]") ]]; then
+            echo "Attention, custom command flag detected!"
+            terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
+            echo "======== Validating the command ========"
+            $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | cut -d'|' -f2-)
+          elif [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[tf-destroy\]") ]]; then
             echo "Attention, destroy flag detected!"
             terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
             echo "======== Destroying GCP Resources ========"
