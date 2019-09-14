@@ -50,6 +50,7 @@ terraform-template: &terraform-template
           GIT_COMMIT_DESC="$(git log --format=oneline -n 1 $CIRCLE_SHA1)"
           echo "${GIT_COMMIT_DESC}"
           if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[tf-destroy\]") ]]; then
+            terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
             terraform destroy --auto-approve
           else
             terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
