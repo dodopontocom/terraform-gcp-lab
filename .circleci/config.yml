@@ -64,8 +64,8 @@ workflows:
   GCP_LABS:
     jobs:
       - test_gcp_sa_account:
-        <<: *non-releasable
+          <<: *only-releasable
       - terraform_provisioning:
-        <<: *non-releasable
-        requires:
-          - test_gcp_sa_account
+          <<: *only-releasable
+          requires:
+            - test_gcp_sa_account
