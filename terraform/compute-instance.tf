@@ -8,7 +8,7 @@ resource "google_compute_instance" "default" {
   zone         = "us-central1-a"
 
   labels {
-    env = "dev"
+    "env" = "dev"
   }
   
   boot_disk {
