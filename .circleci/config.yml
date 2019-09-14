@@ -39,7 +39,7 @@ gcp-account-template: &gcp-account-template
           echo "bucket step passed..."
 terraform-template: &terraform-template
   docker:
-    - image: hashicorp/terraform:light
+    - image: hashicorp/terraform
   steps:
     - checkout
     - run:
