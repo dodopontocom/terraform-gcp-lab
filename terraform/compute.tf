@@ -6,7 +6,7 @@ resource "null_resource" "resource-to-wait-on" {
 }
 
 resource "google_project_service" "gke-api" {
-  project = "gcp-laboratories"
+  project = "${var.project_id}"
   service = "container.googleapis.com"
   disable_dependent_services = true
   disable_on_destroy         = false
