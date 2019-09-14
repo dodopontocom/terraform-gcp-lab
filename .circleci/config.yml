@@ -39,7 +39,7 @@ gcp-account-template: &gcp-account-template
           echo "bucket step passed..."
 terraform-template: &terraform-template
   docker:
-    - image: hashicorp/terraform:light
+    - image: hashicorp/terraform:xenion
   steps:
     - checkout
     - run:
@@ -48,8 +48,6 @@ terraform-template: &terraform-template
           echo ${GCP_SA} > ${TF_VAR_key}
           cd ${TERRAFORM_STR}
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
-          ls -lrta
-          sed -i ./provider.tf "s#\\\"##g"
           terraform plan
           # terraform apply --auto-approve
 jobs:
