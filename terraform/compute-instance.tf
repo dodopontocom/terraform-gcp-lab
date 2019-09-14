@@ -6,7 +6,6 @@ resource "google_compute_instance" "default" {
   name         = "vm-tf-${random_id.instance_id.hex}"
   machine_type = "f1-micro"
   zone         = "us-central1-a"
-  env = "dev"
   
   boot_disk {
     initialize_params {
