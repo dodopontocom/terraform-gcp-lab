@@ -1,5 +1,5 @@
 resource "google_cloudfunctions_function" "function-start" {
-  name                  = "${var.start_function_name"
+  name                  = "${var.start_function_name}"
   description           = "Start VM function"
   runtime               = "nodejs8"
 
