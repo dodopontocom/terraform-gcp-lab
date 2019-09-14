@@ -1,8 +1,13 @@
 resource "null_resource" "resource-to-wait-on" {
   provisioner "local-exec" {
-    command = "sleep 90"
+    command = "sleep 30"
   }
-  depends_on = ["google_project_service.gke-api"]
+  depends_on = ["google_project_service.compute-api",
+                "google_project_service.crm-api",
+                "google_project_service.scheduler-api",
+                "google_project_service.pubsub-api",
+                "google_project_service.functions-api"
+                ]
 }
 
 resource "google_project_service" "crm-api" {
