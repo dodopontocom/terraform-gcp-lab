@@ -11,3 +11,6 @@ variable "start_topic" { }
 variable "stop_topic" { }
 variable "start_function_name" { }
 variable "stop_function_name" { }
+variable "gcp_bucket" { }
+variable "function_zip_name" { }
+variable "function_zip_source_file" { }
