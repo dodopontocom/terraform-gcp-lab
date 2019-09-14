@@ -7,3 +7,5 @@ variable "region" {
 variable "key" {
     description = "The operations (devops) service account"
 }
+variable "start_topic" { }
+variable "stop_topic" { }
