@@ -51,6 +51,7 @@ terraform-template: &terraform-template
         name: "terraform provisioning"
         command: |
           echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA}
+          export
           cd ${TERRAFORM_STR}
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
 
