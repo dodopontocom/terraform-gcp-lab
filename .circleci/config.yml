@@ -48,6 +48,7 @@ terraform-template: &terraform-template
           echo ${GCP_SA} > ${TF_VAR_key}
           cd ${TERRAFORM_STR}
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
+          sed -i provider.tf 's#\\\"##g'
           terraform plan
           # terraform apply --auto-approve
 jobs:
