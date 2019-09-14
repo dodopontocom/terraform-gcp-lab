@@ -67,5 +67,5 @@ workflows:
         <<: *non-releasable
       - terraform_provisioning:
         <<: *non-releasable
-          requires:
-            - test_gcp_sa_account
+        requires:
+          - test_gcp_sa_account
