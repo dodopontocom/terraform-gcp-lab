@@ -10,8 +10,12 @@ resource "google_cloudfunctions_function" "function-start" {
   runtime               = "nodejs8"
   source_archive_bucket = "${var.gcp_bucket}"
   source_archive_object = "${google_storage_bucket_object.function-zip.name}"
-  //trigger_topic          = true
   //entry_point           = "helloGET"
+
+  event_trigger {
+    event_type = "google.pubsub.topic.publish"
+    resource   = "${google_pubsub_topic.start-event-topic.name}"
+  }
 
   available_memory_mb   = 128
   timeout               = 60
@@ -23,6 +27,11 @@ resource "google_cloudfunctions_function" "function-stop" {
   runtime               = "nodejs8"
   source_archive_bucket = "${var.gcp_bucket}"
   source_archive_object = "${google_storage_bucket_object.function-zip.name}"
+
+  event_trigger {
+    event_type = "google.pubsub.topic.publish"
+    resource   = "${google_pubsub_topic.stop-event-topic.name}"
+  }
 
   available_memory_mb   = 128
   timeout               = 60
