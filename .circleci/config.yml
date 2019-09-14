@@ -45,7 +45,7 @@ terraform-template: &terraform-template
     - run:
         name: "terraform provisioning"
         command: |
-          echo ${GCP_SA} > ${TF_VAR_service_account_credential_pathda}
+          echo ${GCP_SA} > ${TF_VAR_service_account_credential_path}
           export
           cd ${TERRAFORM_STR}
           pwd
