@@ -1,7 +1,13 @@
 version: 2.1
+
 defaults: &defaults
   environment:
-    GCLOUD_PRODJECT_ID: ""
+    TF_GCP_BUCKET: "gcp-laboratories-tf-state"
+    TERRAFORM_STR: "terraform"
+    TF_VAR_project_id: "gcp-laboratories"
+    TF_VAR_region: "us-central1"
+    TF_VAR_key: "/root/terraform-gcp-lab/credentials/credential.json"
+  working_directory: /root/terraform-gcp-lab
 only-releasable: &only-releasable
   filters:
     branches:
@@ -16,24 +22,56 @@ non-releasable: &non-releasable
         - master
         - develop
         - patch
-
+gcp-account-template: &gcp-account-template
+  docker:
+    - image: google/cloud-sdk
+  steps:
+    - checkout
+    - run:
+        name: "validate gcp service account"
+        command: |
+          echo ${GCP_SA} > ${TF_VAR_key}
+          gcloud auth activate-service-account --key-file=${TF_VAR_key}
+          gcloud config set project ${TF_VAR_project_id}
+          echo "checking bucket..."
+          gsutil ls gs://${TF_GCP_BUCKET}/
+          echo "bucket step passed..."
+terraform-template: &terraform-template
+  docker:
+    - image: hashicorp/terraform:light
+  steps:
+    - checkout
+    - run:
+        name: "terraform provisioning"
+        command: |
+          echo ${GCP_SA} > ${TF_VAR_key}
+          export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
+          cd ${TERRAFORM_STR}
+          GIT_COMMIT_DESC="$(git log --format=oneline -n 1 $CIRCLE_SHA1)"
+          echo "${GIT_COMMIT_DESC}"
+          if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[tf-destroy\]") ]]; then
+            terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
+            terraform destroy --auto-approve
+          else
+            terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
+            terraform plan
+            terraform apply --auto-approve
+          fi
 jobs:
-  test:
+  test_gcp_sa_account:
     <<: *defaults
-    docker:
-      - image: node
-    working_directory: $PROJECT_TEST
-    steps:
-      - checkout
-      - run:
-          name: "python test"
-          command: |
-            cd $PROJECT_TEST
-            python --version
+    <<: *gcp-account-template
+  terraform_provisioning:
+    <<: *defaults
+    <<: *terraform-template
+
 workflows:
   version: 2.1
-  
   GCP_LABS:
     jobs:
-      - test:
-        <<: *non-releasable
+      - test_gcp_sa_account:
+          <<: *only-releasable
+      - terraform_provisioning:
+          <<: *only-releasable
+          requires:
+            - test_gcp_sa_account
