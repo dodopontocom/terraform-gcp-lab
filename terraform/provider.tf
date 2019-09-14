@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = "${file(${var.service_account_credential_path})}"
+  credentials = "${file("${var.key}")}"
   project     = "${var.project_id}"
   region      = "${var.region}"
 }

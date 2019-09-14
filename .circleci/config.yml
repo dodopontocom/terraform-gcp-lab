@@ -6,7 +6,7 @@ defaults: &defaults
     TERRAFORM_STR: "terraform"
     TF_VAR_project_id: "gcp-laboratories"
     TF_VAR_region: "us-central1"
-    TF_VAR_service_account_credential_path: "/root/terraform-gcp-lab/.credentials/credential.json"
+    TF_VAR_key: "/root/terraform-gcp-lab/.credentials/credential.json"
 
   working_directory: /root/terraform-gcp-lab
 only-releasable: &only-releasable
@@ -31,8 +31,8 @@ gcp-account-template: &gcp-account-template
     - run:
         name: "validate gcp service account"
         command: |
-          echo ${GCP_SA} > ${TF_VAR_service_account_credential_path}
-          gcloud auth activate-service-account --key-file=${TF_VAR_service_account_credential_path}
+          echo ${GCP_SA} > ${TF_VAR_key}
+          gcloud auth activate-service-account --key-file=${TF_VAR_key}
           gcloud config set project ${TF_VAR_project_id}
           echo "checking bucket..."
           gsutil ls gs://${TF_GCP_BUCKET}/
@@ -45,7 +45,7 @@ terraform-template: &terraform-template
     - run:
         name: "terraform provisioning"
         command: |
-          echo ${GCP_SA} > ${TF_VAR_service_account_credential_path}
+          echo ${GCP_SA} > ${TF_VAR_key}
           cd ${TERRAFORM_STR}
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
           terraform plan
