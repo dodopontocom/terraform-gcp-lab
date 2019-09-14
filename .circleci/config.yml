@@ -22,20 +22,20 @@ non-releasable: &non-releasable
         - master
         - develop
         - patch
-gcp-account-template: &gcp-account-template
+gcp-bucket-checker-template: &gcp-bucket-checker-template
   docker:
     - image: google/cloud-sdk
   steps:
     - checkout
     - run:
-        name: "validate gcp service account"
+        name: "validate tf state bucket "
         command: |
           echo ${GCP_SA} > ${TF_VAR_key}
           gcloud auth activate-service-account --key-file=${TF_VAR_key}
           gcloud config set project ${TF_VAR_project_id}
-          echo "checking bucket..."
+          echo "Checking if GCP Bucket is created..."
           gsutil ls gs://${TF_GCP_BUCKET}/
-          echo "bucket step passed..."
+          echo "Bucket step passed!"
 terraform-template: &terraform-template
   docker:
     - image: hashicorp/terraform:light
@@ -47,8 +47,6 @@ terraform-template: &terraform-template
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
-          GIT_COMMIT_DESC="$(git log --format=oneline -n 1 $CIRCLE_SHA1)"
-          echo "${GIT_COMMIT_DESC}"
           if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[tf-destroy\]") ]]; then
             terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
             terraform destroy --auto-approve
@@ -58,10 +56,10 @@ terraform-template: &terraform-template
             terraform apply --auto-approve
           fi
 jobs:
-  test_gcp_sa_account:
+  Is TF State Bucket Created:
     <<: *defaults
-    <<: *gcp-account-template
-  terraform_provisioning:
+    <<: *gcp-bucket-checker-template
+  Terraform Provisioning Step:
     <<: *defaults
     <<: *terraform-template
 
