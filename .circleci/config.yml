@@ -49,8 +49,9 @@ terraform-template: &terraform-template
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
-          if [[ ${GIT_COMMIT_DESC} =~ *[tf-destroy]* ]]; then
-            terraform destrou --auto-approve
+          echo "-=-=-= ${GIT_COMMIT_DESC}"
+          if [[ $(echo "${GIT_COMMIT_DESC}" | grep -E "\[tf-destroy\]") ]]; then
+            terraform destroy --auto-approve
           else
             terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
             terraform plan
