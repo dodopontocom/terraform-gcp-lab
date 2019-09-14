@@ -48,6 +48,7 @@ terraform-template: &terraform-template
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
           GIT_COMMIT_DESC="$(git log --format=oneline -n 1 $CIRCLE_SHA1)"
+          echo "${GIT_COMMIT_DESC}"
           if [[ $(echo "${GIT_COMMIT_DESC}" | grep -E "\[tf-destroy\]") ]]; then
             terraform destroy --auto-approve
           else
