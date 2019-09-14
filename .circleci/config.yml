@@ -7,6 +7,7 @@ defaults: &defaults
     TF_VAR_project_id: "gcp-laboratories"
     TF_VAR_region: "us-central1"
     TF_VAR_key: "/root/terraform-gcp-lab/credentials/credential.json"
+    GIT_COMMIT_DESC: git log --format=oneline -n 1 $CIRCLE_SHA1
 
   working_directory: /root/terraform-gcp-lab
 only-releasable: &only-releasable
@@ -48,9 +49,13 @@ terraform-template: &terraform-template
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
-          terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
-          terraform plan
-          terraform apply --auto-approve
+          if [[ ${GIT_COMMIT_DESC} =~ /*[tf-destroy]*/ ]]; then
+            terraform destrou --auto-approve
+          else
+            terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
+            terraform plan
+            terraform apply --auto-approve
+          fi
 jobs:
   test_gcp_sa_account:
     <<: *defaults
