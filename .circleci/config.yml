@@ -29,6 +29,8 @@ gcp-account-template: &gcp-account-template
     - run:
         name: "validate gcp service account"
         command: |
+          pwd
+          ls -lrta
           /bin/bash .circleci/definitions.sh
           echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA}
           gcloud auth activate-service-account --key-file=${GCLOUD_DEVOPS_SA}
