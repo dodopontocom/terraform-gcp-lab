@@ -6,9 +6,6 @@ resource "google_cloud_scheduler_job" "stop_job" {
 
   pubsub_target {
     topic_name = "${var.stop_topic}"
-    data = {
-      "zone" = "us-central1-a",
-      "label" = "env=dev"
-    }
+    data = "${base64encode('{"zone":"us-central1-a", "label":"env=dev"}')}"
   }
 }
