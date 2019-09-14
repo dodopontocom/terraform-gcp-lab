@@ -10,3 +10,4 @@ variable "key" {
 variable "start_topic" { }
 variable "stop_topic" { }
 variable "start_function_name" { }
+variable "stop_function_name" { }

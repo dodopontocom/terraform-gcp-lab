@@ -10,6 +10,7 @@ defaults: &defaults
     TF_VAR_start_topic: "start-instance-event"
     TF_VAR_stop_topic: "stop-instance-event"
     TF_VAR_start_function_name: "startInstancePubSub"
+    TF_VAR_stop_function_name: "stopInstancePubSub"
   working_directory: /root/terraform-gcp-lab
 only-releasable: &only-releasable
   filters:
