@@ -48,6 +48,7 @@ terraform-template: &terraform-template
           echo ${GCP_SA} > ${TF_VAR_service_account_credential_pathda}
           export
           cd ${TERRAFORM_STR}
+          pwd
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
 
 jobs:
