@@ -2,16 +2,11 @@ version: 2.1
 
 defaults: &defaults
   environment:
-    GCLOUD_PRODJECT_ID: "gcp-laboratories"
-    GCLOUD_PRODJECT_REGION: "us-central1"
     TF_GCP_BUCKET: "gcp-laboratories-tf-state"
     TERRAFORM_STR: "terraform"
-
-    GCLOUD_DEVOPS_SA: "/root/terraform-gcp-lab/.credentials/credential.json"
-
-    TF_VAR_project_id: aGCLOUD_PRODJECT_ID
-    TF_VAR_region: GCLOUD_PRODJECT_REGION
-    TF_VAR_service_account_credential_path: GCLOUD_DEVOPS_SA
+    TF_VAR_project_id: "gcp-laboratories"
+    TF_VAR_region: "us-central1"
+    TF_VAR_service_account_credential_path: "/root/terraform-gcp-lab/.credentials/credential.json"
 
   working_directory: /root/terraform-gcp-lab
 only-releasable: &only-releasable
@@ -36,9 +31,9 @@ gcp-account-template: &gcp-account-template
     - run:
         name: "validate gcp service account"
         command: |
-          echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA}
-          gcloud auth activate-service-account --key-file=${GCLOUD_DEVOPS_SA}
-          gcloud config set project ${GCLOUD_PRODJECT_ID}
+          echo ${GCP_SA} > ${TF_VAR_service_account_credential_path}
+          gcloud auth activate-service-account --key-file=${TF_VAR_service_account_credential_path}
+          gcloud config set project ${TF_VAR_project_id}
           echo "checking bucket..."
           gsutil ls gs://${TF_GCP_BUCKET}/
           echo "bucket step passed..."
@@ -50,7 +45,7 @@ terraform-template: &terraform-template
     - run:
         name: "terraform provisioning"
         command: |
-          echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA}
+          echo ${GCP_SA} > ${TF_VAR_service_account_credential_pathda}
           export
           cd ${TERRAFORM_STR}
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
