@@ -21,6 +21,8 @@ resource "google_cloudfunctions_function" "function-stop" {
   name                  = "${var.stop_function_name}"
   description           = "Start VM function"
   runtime               = "nodejs8"
+  source_archive_bucket = "${var.gcp_bucket}"
+  source_archive_object = "${google_storage_bucket_object.function-zip.name}"
 
   available_memory_mb   = 128
   timeout               = 60
