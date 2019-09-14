@@ -6,8 +6,16 @@ resource "null_resource" "resource-to-wait-on" {
                 "google_project_service.crm-api",
                 "google_project_service.scheduler-api",
                 "google_project_service.pubsub-api",
-                "google_project_service.functions-api"
+                "google_project_service.functions-api",
+                "google_project_service.storage-api"
                 ]
+}
+
+resource "google_project_service" "storage-api" {
+  project = "${var.project_id}"
+  service = "storage-component.googleapis.com"
+  disable_dependent_services = true
+  disable_on_destroy         = false
 }
 
 resource "google_project_service" "crm-api" {
