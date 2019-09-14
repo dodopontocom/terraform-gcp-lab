@@ -49,7 +49,7 @@ terraform-template: &terraform-template
           cd ${TERRAFORM_STR}
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
           terraform plan
-          terraform apply --auto-approve
+          # terraform apply --auto-approve
 jobs:
   test_gcp_sa_account:
     <<: *defaults
