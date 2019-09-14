@@ -47,6 +47,7 @@ terraform-template: &terraform-template
         command: |
           apk add --update && apk add bash
           which bash
+          export SHELL=/bin/bash
           echo ${GCP_SA} > ${TF_VAR_key}
           cd ${TERRAFORM_STR}
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
