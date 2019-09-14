@@ -48,7 +48,9 @@ terraform-template: &terraform-template
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
           if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[tf-destroy\]") ]]; then
+            echo "Attention, destroy flag detected!"
             terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
+            echo "======== Destroying GCP Resources ========"
             terraform destroy --auto-approve
           else
             terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
