@@ -46,7 +46,7 @@ terraform-template: &terraform-template
         name: "terraform provisioning"
         command: |
           echo ${GCP_SA} > ${TF_VAR_key}
-          export GOOGLE_APPLICATION_CREDENTIALS=${GCP_SA}
+          export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
           terraform plan
