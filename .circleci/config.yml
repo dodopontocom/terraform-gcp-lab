@@ -12,6 +12,7 @@ defaults: &defaults
     TF_VAR_start_function_name: "startInstancePubSub"
     TF_VAR_stop_function_name: "stopInstancePubSub"
     TF_VAR_function_zip_name: "index.zip"
+    TF_VAR_function_zip_source_file: "/root/terraform-gcp-lab/gcloud-functions/"
   working_directory: /root/terraform-gcp-lab
 only-releasable: &only-releasable
   filters:
