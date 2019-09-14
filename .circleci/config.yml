@@ -39,12 +39,14 @@ gcp-account-template: &gcp-account-template
           echo "bucket step passed..."
 terraform-template: &terraform-template
   docker:
-    - image: hashicorp/terraform:full
+    - image: hashicorp/terraform:light
   steps:
     - checkout
     - run:
         name: "terraform provisioning"
         command: |
+          pkg add --update && pkg add bash
+          which bash
           echo ${GCP_SA} > ${TF_VAR_key}
           cd ${TERRAFORM_STR}
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
