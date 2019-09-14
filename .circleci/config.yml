@@ -48,7 +48,8 @@ terraform-template: &terraform-template
           echo ${GCP_SA} > ${TF_VAR_service_account_credential_path}
           cd ${TERRAFORM_STR}
           terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
-          terraform plan --auto-approve
+          terraform plan
+          terraform apply --auto-approve
 jobs:
   test_gcp_sa_account:
     <<: *defaults
