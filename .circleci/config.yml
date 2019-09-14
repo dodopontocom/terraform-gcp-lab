@@ -37,8 +37,9 @@ gcp-account-template: &gcp-account-template
         name: "validate gcp service account"
         command: |
           pwd
-          ls -lrta
-          echo ${GCP_SA} > ${GCLOUD_DEVOPS_SA}
+          ls -lrta .credentials
+          touch ${GCLOUD_DEVOPS_SA}
+          echo "${GCP_SA}" > ${GCLOUD_DEVOPS_SA}
           gcloud auth activate-service-account --key-file=${GCLOUD_DEVOPS_SA}
           gcloud config set project ${GCLOUD_PRODJECT_ID}
           echo "checking bucket..."
