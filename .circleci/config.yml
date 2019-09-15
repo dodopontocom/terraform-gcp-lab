@@ -24,6 +24,7 @@ only-releasable: &only-releasable
         - master
         - develop
         - patch
+        - feature/devops
 non-releasable: &non-releasable
   filters:
     branches:
