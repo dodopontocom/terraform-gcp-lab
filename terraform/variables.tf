@@ -15,3 +15,4 @@ variable "gcp_bucket" { }
 variable "function_zip_name" { }
 variable "function_zip_source_file" { }
 variable "schedule_stop" { }
+variable "schedule_start" { }
