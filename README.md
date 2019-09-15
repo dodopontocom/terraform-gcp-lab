@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/dodopontocom/python-docker-env.svg?style=svg)](https://circleci.com/gh/dodopontocom/python-docker-env)
+[![CircleCI](https://circleci.com/gh/dodopontocom/terraform-gcp-lab.svg?style=svg)](https://circleci.com/gh/dodopontocom/terraform-gcp-lab)
 
-## GOOGLE CLOUD PLATFORM LAB REPOSITORY
+## Google Cloud Platform LAB Repository
 This repository is part of my GCP studies to perform the vast possibilities of using/implementing google services
