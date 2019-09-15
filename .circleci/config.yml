@@ -2,11 +2,20 @@ version: 2.1
 
 defaults: &defaults
   environment:
-    TF_GCP_BUCKET: "gcp-laboratories-tf-state"
+    TF_VAR_gcp_bucket: "gcp-laboratories-tf-state"
     TERRAFORM_STR: "terraform"
     TF_VAR_project_id: "gcp-laboratories"
     TF_VAR_region: "us-central1"
     TF_VAR_key: "/root/terraform-gcp-lab/credentials/credential.json"
+    TF_VAR_start_topic: "start-instance-event"
+    TF_VAR_stop_topic: "stop-instance-event"
+    TF_VAR_start_function_name: "startInstancePubSub"
+    TF_VAR_stop_function_name: "stopInstancePubSub"
+    TF_VAR_function_zip_name: "index.zip"
+    TF_VAR_function_zip_source_file: "/root/terraform-gcp-lab/gcp-functions/index.zip"
+    TF_VAR_schedule_stop: "stop-job"
+    TF_VAR_schedule_start: "start-job"
+
   working_directory: /root/terraform-gcp-lab
 only-releasable: &only-releasable
   filters:
@@ -22,20 +31,21 @@ non-releasable: &non-releasable
         - master
         - develop
         - patch
-gcp-account-template: &gcp-account-template
+gcp-bucket-checker-template: &gcp-bucket-checker-template
   docker:
     - image: google/cloud-sdk
   steps:
     - checkout
     - run:
-        name: "validate gcp service account"
+        name: "validate tf state bucket "
         command: |
+          echo "account"
           echo ${GCP_SA} > ${TF_VAR_key}
           gcloud auth activate-service-account --key-file=${TF_VAR_key}
           gcloud config set project ${TF_VAR_project_id}
-          echo "checking bucket..."
-          gsutil ls gs://${TF_GCP_BUCKET}/
-          echo "bucket step passed..."
+          echo "Checking if GCP Bucket is created..."
+          gsutil ls gs://${TF_VAR_gcp_bucket}/
+          echo "Bucket step passed!"
 terraform-template: &terraform-template
   docker:
     - image: hashicorp/terraform:light
@@ -47,21 +57,26 @@ terraform-template: &terraform-template
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
-          GIT_COMMIT_DESC="$(git log --format=oneline -n 1 $CIRCLE_SHA1)"
-          echo "${GIT_COMMIT_DESC}"
-          if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[tf-destroy\]") ]]; then
-            terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
+          if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[tf-custom\]") ]]; then
+            echo "Attention, custom command flag detected!"
+            terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
+            echo "======== Validating the command ========"
+            $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | cut -d'|' -f2-)
+          elif [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[tf-destroy\]") ]]; then
+            echo "Attention, destroy flag detected!"
+            terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
+            echo "======== Destroying GCP Resources ========"
             terraform destroy --auto-approve
           else
-            terraform init -backend-config="bucket=${TF_GCP_BUCKET}" -backend-config="prefix=${TERRAFORM_STR}"
+            terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
             terraform plan
             terraform apply --auto-approve
           fi
 jobs:
-  test_gcp_sa_account:
+  tf_state_checker:
     <<: *defaults
-    <<: *gcp-account-template
-  terraform_provisioning:
+    <<: *gcp-bucket-checker-template
+  tf_provisioning:
     <<: *defaults
     <<: *terraform-template
 
@@ -69,9 +84,9 @@ workflows:
   version: 2.1
   GCP_LABS:
     jobs:
-      - test_gcp_sa_account:
+      - tf_state_checker:
           <<: *only-releasable
-      - terraform_provisioning:
+      - tf_provisioning:
           <<: *only-releasable
           requires:
-            - test_gcp_sa_account
+            - tf_state_checker
