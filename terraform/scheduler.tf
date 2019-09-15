@@ -14,6 +14,7 @@ resource "google_cloud_scheduler_job" "start_job" {
     topic_name = "projects/gcp-laboratories/topics/start-instance-event"
     //data = "${base64encode("test")}"
     data = "${base64encode("{\"zone\":\"us-central1-a\", \"label\":\"env=dev\"}")}"
+  }
 }
 resource "google_cloud_scheduler_job" "stop_job" {
   name     = "${var.schedule_stop}"
