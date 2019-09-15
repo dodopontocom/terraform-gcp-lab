@@ -1,8 +1,8 @@
 
-resource "google_app_engine_application" "app" {
+/*resource "google_app_engine_application" "app" {
   project     = "${var.project_id}"
   location_id = "us-central"
-}
+}*/
 
 resource "google_cloud_scheduler_job" "stop_job" {
   name     = "${var.schedule_stop}"
@@ -17,7 +17,7 @@ resource "google_cloud_scheduler_job" "stop_job" {
     data = "${base64encode("{\"zone\":\"us-central1-a\", \"label\":\"env=dev\"}")}"
   }
 
-  depends_on = [
+  /*depends_on = [
     "google_app_engine_application.app"
-  ]
+  ]*/
 }
