@@ -68,7 +68,7 @@ terraform-template: &terraform-template
             echo "======== Destroying GCP Resources ========"
             terraform destroy --auto-approve
           else
-            TERRAFORM_APP_ENGINE_FILE=./functions.tf
+            TERRAFORM_APP_ENGINE_FILE=./scheduler.tf
             APP_ENGINE_RESOURCE_NAME=$(cat ${TERRAFORM_APP_ENGINE_FILE} | grep -m 1 resource | awk '{gsub("\"",""); print $2 "." $3}')
             terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
             terraform import ${APP_ENGINE_RESOURCE_NAME} ${TF_VAR_project_id}
