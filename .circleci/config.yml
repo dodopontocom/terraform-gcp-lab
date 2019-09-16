@@ -55,7 +55,7 @@ create-function-zip-template: &create-function-zip-template
     - run:
         name: "create and provide nodejs functions zip"
         command: |
-          zip gcp-functions/index.zip nodejs/schedulerinstance/*
+          zip gcp-functions/index.zip nodejs/scheduleinstance/*
     - store_artifacts:
         path: gcp-functions/index.zip
         destination: gcp-functions/index.zip
@@ -67,7 +67,6 @@ terraform-template: &terraform-template
     - run:
         name: "terraform provisioning"
         command: |
-          zip gcp-functions/index.zip nodejs/schedulerinstance/*
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
