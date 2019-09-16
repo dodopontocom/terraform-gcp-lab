@@ -1,8 +1,9 @@
 
-/*resource "google_app_engine_application" "app" {
+resource "google_app_engine_application" "app" {
   project     = "${var.project_id}"
   location_id = "us-central"
-}*/
+}
+
 resource "google_cloud_scheduler_job" "start_job" {
   name     = "${var.schedule_start}"
   description = "start test job"
@@ -23,9 +24,7 @@ resource "google_cloud_scheduler_job" "stop_job" {
   time_zone = "America/Sao_Paulo"
 
   pubsub_target {
-    //topic_name = "${var.stop_topic}"
-    topic_name = "projects/gcp-laboratories/topics/stop-instance-event"
-    //data = "${base64encode("test")}"
+    topic_name = "projects/${var.project_id}/topics/stop-instance-event"
     data = "${base64encode("{\"zone\":\"us-central1-a\", \"label\":\"env=dev\"}")}"
   }
 
