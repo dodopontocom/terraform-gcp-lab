@@ -58,7 +58,7 @@ terraform-template: &terraform-template
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
-          if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[tf-custom\]") ]]; then
+          if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-command\]") ]]; then
             echo "Attention, custom command flag detected!"
             terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
             echo "======== Validating the command ========"
