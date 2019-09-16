@@ -70,7 +70,7 @@ terraform-template: &terraform-template
     - run:
         name: "terraform provisioning"
         command: |
-          ls -lrta
+          ls -lrta gcp-functions
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
