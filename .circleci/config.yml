@@ -46,6 +46,21 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
           echo "Checking if GCP Bucket is created..."
           gsutil ls gs://${TF_VAR_gcp_bucket}/
           echo "Bucket step passed!"
+create-function-zip-template: &create-function-zip-template
+  docker:
+    - image: circleci/classic:latest
+  steps:
+    - attach_workspace:
+        at: /tmp/workspace
+    - checkout
+    - run:
+        name: "create and provide nodejs functions zip"
+        command: |
+          zip gcp-functions/index.zip nodejs/schedulerinstance/*
+    - persist_to_workspace:
+        root: *workspace_root
+        paths:
+          - gcp-functions
 terraform-template: &terraform-template
   docker:
     - image: hashicorp/terraform:light
@@ -76,10 +91,14 @@ terraform-template: &terraform-template
             terraform plan
             terraform apply --auto-approve
           fi
+
 jobs:
   tf_state_checker:
     <<: *defaults
     <<: *gcp-bucket-checker-template
+  create_zip_file:
+    <<: *defaults
+    <<: *create-function-zip-template
   tf_provisioning:
     <<: *defaults
     <<: *terraform-template
@@ -90,7 +109,11 @@ workflows:
     jobs:
       - tf_state_checker:
           <<: *only-releasable
-      - tf_provisioning:
+      - create_zip_file:
           <<: *only-releasable
           requires:
             - tf_state_checker
+      - tf_provisioning:
+          <<: *only-releasable
+          requires:
+            - create_zip_file
