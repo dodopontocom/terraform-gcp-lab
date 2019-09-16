@@ -1,5 +1,5 @@
 
-resource "google_app_engine_application" "app" {
+resource "google_app_engine_application" "appengine" {
   project     = "${var.project_id}"
   location_id = "us-central"
 }
@@ -14,6 +14,10 @@ resource "google_cloud_scheduler_job" "start_job" {
     topic_name = "projects/gcp-laboratories/topics/start-instance-event"
     data = "${base64encode("{\"zone\":\"us-central1-a\", \"label\":\"env=dev\"}")}"
   }
+  
+  depends_on = [
+    "google_app_engine_application.appengine"
+  ]
 }
 resource "google_cloud_scheduler_job" "stop_job" {
   name     = "${var.schedule_stop}"
@@ -27,6 +31,6 @@ resource "google_cloud_scheduler_job" "stop_job" {
   }
 
   depends_on = [
-    "google_app_engine_application.app"
+    "google_app_engine_application.appengine"
   ]
 }
