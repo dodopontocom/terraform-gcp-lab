@@ -57,10 +57,9 @@ create-function-zip-template: &create-function-zip-template
         name: "create and provide nodejs functions zip"
         command: |
           zip gcp-functions/index.zip nodejs/schedulerinstance/*
-    - persist_to_workspace:
-        root: *workspace_root
-        paths:
-          - gcp-functions
+    - store_artifacts:
+        path: gcp-functions/index.zip
+        destination: gcp-functions/index.zip
 terraform-template: &terraform-template
   docker:
     - image: hashicorp/terraform:light
