@@ -95,7 +95,6 @@ jobs:
     <<: *defaults
     <<: *gcp-bucket-checker-template
   create_zip_file:
-    <<: *defaults
     <<: *create-function-zip-template
   tf_provisioning:
     <<: *defaults
