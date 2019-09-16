@@ -40,7 +40,6 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
     - run:
         name: "validate tf state bucket "
         command: |
-          echo "account"
           echo ${GCP_SA} > ${TF_VAR_key}
           gcloud auth activate-service-account --key-file=${TF_VAR_key}
           gcloud config set project ${TF_VAR_project_id}
