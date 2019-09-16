@@ -48,7 +48,7 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
           echo "Bucket step passed!"
 create-function-zip-template: &create-function-zip-template
   docker:
-    - image: circleci/classic:latest
+    - image: node:latest
   steps:
     - attach_workspace:
         at: /tmp/workspace
