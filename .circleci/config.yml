@@ -47,8 +47,7 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
           gsutil ls gs://${TF_VAR_gcp_bucket}/
           echo "Bucket step passed!"
 create-function-zip-template: &create-function-zip-template
-  docker:
-    - image: ubuntu
+  machine: true
   steps:
     - attach_workspace:
         at: /tmp/workspace
