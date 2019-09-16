@@ -12,7 +12,8 @@ defaults: &defaults
     TF_VAR_start_function_name: "startInstancePubSub"
     TF_VAR_stop_function_name: "stopInstancePubSub"
     TF_VAR_function_zip_name: "index.zip"
-    TF_VAR_function_zip_source_file: "/root/terraform-gcp-lab/gcp-functions/index.zip"
+    TF_VAR_function_zip_source_file: "/home/circleci/project/gcp-functions/index.zip"
+    #TF_VAR_function_zip_source_file: "/root/terraform-gcp-lab/gcp-functions/index.zip"
     TF_VAR_schedule_stop: "stop-job"
     TF_VAR_schedule_start: "start-job"
 
