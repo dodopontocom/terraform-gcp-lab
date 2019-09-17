@@ -5,7 +5,7 @@ resource "random_id" "instance_id" {
 resource "google_compute_instance" "default" {
   name         = "vm-tf-${random_id.instance_id.hex}"
   machine_type = "${var.machine_type}"
-  zone         = ${var.zone}"
+  zone         = "${var.zone}"
 
   labels       = {
     "env" = "${var.compute_instance_environment}"
