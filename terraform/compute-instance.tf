@@ -17,6 +17,8 @@ resource "google_compute_instance" "default" {
     }
   }
   
+  allow_stopping_for_update = true
+  
   metadata_startup_script = "${file("../scripts/git-lab-installation.sh")}"
 
   network_interface {
