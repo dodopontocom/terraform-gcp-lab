@@ -54,9 +54,11 @@ terraform-template: &terraform-template
     - image: hashicorp/terraform:light
   steps:
     - checkout
+    - attach_workspace:
+        at: gcp-functions/
     - run:
         name: "Export terraform variables"
-        command: cat .circleci/tf-definitions.sh >> $BASH_ENV
+        command: . .circleci/tf-definitions.sh
     - run:
         name: "Terraform provisioning"
         command: |
@@ -81,8 +83,6 @@ terraform-template: &terraform-template
             terraform plan
             terraform apply --auto-approve
           fi
-    - attach_workspace:
-        at: gcp-functions/
 
 jobs:
   tf_state_checker:
