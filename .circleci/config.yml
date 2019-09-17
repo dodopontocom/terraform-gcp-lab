@@ -20,16 +20,14 @@ non-releasable: &non-releasable
         - master
         - develop
         - patch
-export-tf-vars: &export-tf-vars
-  - run:
-      name: "Export terraform variables"
-      command: cat .circleci/tf-definitions.sh >> $BASH_ENV
 gcp-bucket-checker-template: &gcp-bucket-checker-template
   docker:
     - image: google/cloud-sdk
   steps:
     - checkout
-    - *export-tf-vars
+    - run:
+        name: "Export terraform variables"
+        command: cat .circleci/tf-definitions.sh >> $BASH_ENV
     - run:
         name: "Validate tf state bucket "
         command: |
@@ -58,7 +56,9 @@ terraform-template: &terraform-template
     - checkout
     - attach_workspace:
         at: gcp-functions/
-    - *export-tf-vars
+    - run:
+        name: "Export terraform variables"
+        command: cat .circleci/tf-definitions.sh >> $BASH_ENV
     - run:
         name: "Terraform provisioning"
         command: |
