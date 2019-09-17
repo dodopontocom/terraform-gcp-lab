@@ -81,6 +81,8 @@ terraform-template: &terraform-template
             terraform plan
             terraform apply --auto-approve
           fi
+    - attach_workspace:
+        at: gcp-functions/
 
 jobs:
   tf_state_checker:
