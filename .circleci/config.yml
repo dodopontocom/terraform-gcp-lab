@@ -27,9 +27,7 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
     - checkout
     - run:
         name: "Export terraform variables"
-        command: |
-          ls -latr $BASH_ENV
-          cat .circleci/tf-definitions.sh >> $BASH_ENV
+        command: . .circleci/tf-definitions.sh
     - run:
         name: "Validate tf state bucket "
         command: |
@@ -61,9 +59,7 @@ terraform-template: &terraform-template
     - run:
         name: "Terraform provisioning"
         command: |
-          ls -lrta .circleci
-          ls -lrta $BASH_ENV
-          cat .circleci/tf-definitions.sh >> $BASH_ENV
+          . .circleci/tf-definitions.sh >> $BASH_ENV
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
