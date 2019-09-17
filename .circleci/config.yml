@@ -60,8 +60,8 @@ terraform-template: &terraform-template
         name: "Terraform provisioning"
         command: |
           cat .circleci/tf-definitions.sh
-          echo ${GCP_SA} > ${TF_VAR_key}
-          export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
+          #echo ${GCP_SA} > ${TF_VAR_key}
+          #export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
           if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-command\]") ]]; then
             echo "Attention, custom command flag detected!"
