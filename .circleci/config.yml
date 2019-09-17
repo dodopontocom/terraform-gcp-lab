@@ -2,7 +2,19 @@ version: 2.1
   
 defaults: &defaults
   environment:
+    TF_VAR_gcp_bucket: "gcp-laboratories-tf-state"
     TERRAFORM_STR: "terraform"
+    TF_VAR_project_id: "gcp-laboratories"
+    TF_VAR_region: "us-central1"
+    TF_VAR_key: "/root/terraform-gcp-lab/credentials/credential.json"
+    TF_VAR_start_topic: "start-instance-event"
+    TF_VAR_stop_topic: "stop-instance-event"
+    TF_VAR_start_function_name: "startInstancePubSub"
+    TF_VAR_stop_function_name: "stopInstancePubSub"
+    TF_VAR_function_zip_name: "index.zip"
+    TF_VAR_function_zip_source_file: "/root/terraform-gcp-lab/gcp-functions/index.zip"
+    TF_VAR_schedule_stop: "stop-job"
+    TF_VAR_schedule_start: "start-job"
   working_directory: /root/terraform-gcp-lab
   
 only-releasable: &only-releasable
@@ -59,7 +71,6 @@ terraform-template: &terraform-template
     - run:
         name: "Terraform provisioning"
         command: |
-          [[ export | grep BASH_ENV ]] && cat .circleci/tf-definitions.sh >> $BASH_ENV
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
