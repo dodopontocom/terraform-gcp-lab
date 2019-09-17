@@ -1,10 +1,4 @@
 version: 2.1
-
-references:
-  exprot_tf_vars: &exprot_tf_vars
-    - run:
-        name: "Export terraform variables"
-        command: cat .circleci/tf-definitions.sh >> $BASH_ENV
   
 defaults: &defaults
   environment:
@@ -31,7 +25,9 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
     - image: google/cloud-sdk
   steps:
     - checkout
-    - *exprot_tf_vars
+    - run:
+        name: "Export terraform variables"
+        command: cat .circleci/tf-definitions.sh >> $BASH_ENV
     - run:
         name: "Validate tf state bucket "
         command: |
@@ -58,7 +54,9 @@ terraform-template: &terraform-template
     - image: hashicorp/terraform:light
   steps:
     - checkout
-    - *exprot_tf_vars
+    - run:
+        name: "Export terraform variables"
+        command: cat .circleci/tf-definitions.sh >> $BASH_ENV
     - attach_workspace:
         at: gcp-functions/
     - run:
