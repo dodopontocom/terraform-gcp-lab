@@ -75,8 +75,7 @@ terraform-template: &terraform-template
     - run:
         name: "Terraform provisioning"
         command: |
-          ls -lrta
-          pwd
+          cat $BASH_ENV
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
