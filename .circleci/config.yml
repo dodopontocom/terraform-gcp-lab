@@ -42,7 +42,7 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
   steps:
     - checkout
     - run:
-        name: "validate tf state bucket "
+        name: "Validate tf state bucket "
         command: |
           echo ${GCP_SA} > ${TF_VAR_key}
           gcloud auth activate-service-account --key-file=${TF_VAR_key}
@@ -55,7 +55,7 @@ create-function-zip-template: &create-function-zip-template
   steps:
     - checkout
     - run:
-        name: "create and provide nodejs functions zip"
+        name: "Create and provide nodejs functions zip"
         command: |
           zip gcp-functions/index.zip nodejs/scheduleinstance/*
     - persist_to_workspace:
@@ -70,7 +70,7 @@ terraform-template: &terraform-template
     - attach_workspace:
         at: gcp-functions/
     - run:
-        name: "terraform provisioning"
+        name: "Terraform provisioning"
         command: |
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
