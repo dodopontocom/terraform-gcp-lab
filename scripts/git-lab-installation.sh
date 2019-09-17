@@ -1,6 +1,8 @@
 #!/bin/bash
 # ref.: https://about.gitlab.com/install/#ubuntu
 
+DEBIAN_FRONTEND=noninteractive
+
 sudo apt-get install -y curl openssh-server ca-certificates
 sudo apt-get install -y postfix
 curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
