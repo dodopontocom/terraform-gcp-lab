@@ -10,7 +10,7 @@ resource "google_cloudfunctions_function" "function-start" {
   runtime               = "nodejs8"
   source_archive_bucket = "${var.gcp_bucket}"
   source_archive_object = "${google_storage_bucket_object.function-zip.name}"
-  //entry_point           = "helloGET"
+  entry_point           = "startInstancePubSub"
 
   event_trigger {
     event_type = "google.pubsub.topic.publish"
@@ -27,6 +27,7 @@ resource "google_cloudfunctions_function" "function-stop" {
   runtime               = "nodejs8"
   source_archive_bucket = "${var.gcp_bucket}"
   source_archive_object = "${google_storage_bucket_object.function-zip.name}"
+  entry_point           = "stopInstancePubSub"
 
   event_trigger {
     event_type = "google.pubsub.topic.publish"

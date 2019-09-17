@@ -24,6 +24,7 @@ only-releasable: &only-releasable
         - master
         - develop
         - patch
+        - feature/devops
 non-releasable: &non-releasable
   filters:
     branches:
@@ -39,25 +40,38 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
     - run:
         name: "validate tf state bucket "
         command: |
-          echo "account"
           echo ${GCP_SA} > ${TF_VAR_key}
           gcloud auth activate-service-account --key-file=${TF_VAR_key}
           gcloud config set project ${TF_VAR_project_id}
           echo "Checking if GCP Bucket is created..."
           gsutil ls gs://${TF_VAR_gcp_bucket}/
           echo "Bucket step passed!"
+create-function-zip-template: &create-function-zip-template
+  machine: true
+  steps:
+    - checkout
+    - run:
+        name: "create and provide nodejs functions zip"
+        command: |
+          zip gcp-functions/index.zip nodejs/scheduleinstance/*
+    - persist_to_workspace:
+        root: gcp-functions/
+        paths:
+          - index.zip
 terraform-template: &terraform-template
   docker:
     - image: hashicorp/terraform:light
   steps:
     - checkout
+    - attach_workspace:
+        at: gcp-functions/
     - run:
         name: "terraform provisioning"
         command: |
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
-          if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[tf-custom\]") ]]; then
+          if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-command\]") ]]; then
             echo "Attention, custom command flag detected!"
             terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
             echo "======== Validating the command ========"
@@ -68,14 +82,20 @@ terraform-template: &terraform-template
             echo "======== Destroying GCP Resources ========"
             terraform destroy --auto-approve
           else
+            TERRAFORM_APP_ENGINE_FILE=./scheduler.tf
+            APP_ENGINE_RESOURCE_NAME=$(cat ${TERRAFORM_APP_ENGINE_FILE} | grep -m 1 resource | awk '{gsub("\"",""); print $2 "." $3}')
             terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
+            terraform import ${APP_ENGINE_RESOURCE_NAME} ${TF_VAR_project_id} || true
             terraform plan
             terraform apply --auto-approve
           fi
+
 jobs:
   tf_state_checker:
     <<: *defaults
     <<: *gcp-bucket-checker-template
+  create_zip_file:
+    <<: *create-function-zip-template
   tf_provisioning:
     <<: *defaults
     <<: *terraform-template
@@ -86,7 +106,11 @@ workflows:
     jobs:
       - tf_state_checker:
           <<: *only-releasable
-      - tf_provisioning:
+      - create_zip_file:
           <<: *only-releasable
           requires:
             - tf_state_checker
+      - tf_provisioning:
+          <<: *only-releasable
+          requires:
+            - create_zip_file
