@@ -27,7 +27,9 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
     - checkout
     - run:
         name: "Export terraform variables"
-        command: cat .circleci/tf-definitions.sh >> $BASH_ENV
+        command: |
+          ls -latr $BASH_ENV
+          cat .circleci/tf-definitions.sh >> $BASH_ENV
     - run:
         name: "Validate tf state bucket "
         command: |
