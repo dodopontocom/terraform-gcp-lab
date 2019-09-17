@@ -16,7 +16,8 @@ resource "google_compute_instance" "default" {
       image = "${var.ubuntu_image}"
     }
   }
-  //metadata_startup_script = "${file("../_scripts/deploy-gcp-v2.sh")}"
+  
+  metadata_startup_script = "${file("../scripts/git-lab-installation.sh")}"
 
   network_interface {
     network = "default"
