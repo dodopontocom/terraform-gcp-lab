@@ -57,7 +57,7 @@ terraform-template: &terraform-template
     - attach_workspace:
         at: gcp-functions/
     - run:
-        name: "Export terraform variables"
+        name: "Export tf variables"
         command: cat .circleci/tf-definitions.sh >> $BASH_ENV
     - run:
         name: "Terraform provisioning"
