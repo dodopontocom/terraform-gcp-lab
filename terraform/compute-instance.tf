@@ -3,8 +3,7 @@ resource "random_id" "instance_id" {
 }
 
 resource "google_compute_instance" "default" {
-  //name         = "vm-tf-${random_id.instance_id.hex}"
-  name         = "vm-tf-123"
+  name         = "vm-tf-${random_id.instance_id.hex}"
   machine_type = "${var.machine_type}"
   zone         = "${var.zone}"
 
