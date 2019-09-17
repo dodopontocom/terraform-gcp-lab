@@ -59,7 +59,7 @@ terraform-template: &terraform-template
     - run:
         name: "Terraform provisioning"
         command: |
-          cat .circleci/tf-definitions.sh >> $BASH_ENV | source $BASH_ENV
+          cat .circleci/tf-definitions.sh
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
