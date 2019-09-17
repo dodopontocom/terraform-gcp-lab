@@ -1,19 +1,19 @@
 resource "random_id" "instance_id" {
-  byte_length = 6
+  byte_length = 4
 }
 
 resource "google_compute_instance" "default" {
   name         = "vm-tf-${random_id.instance_id.hex}"
-  machine_type = "f1-micro"
-  zone         = "us-central1-a"
+  machine_type = "${var.machine_type}"
+  zone         = ${var.zone}"
 
   labels       = {
-    "env" = "dev"
+    "env" = "${var.compute_instance_environment}"
   }
   
   boot_disk {
     initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-1804-lts"
+      image = "${var.ubuntu_image}"
     }
   }
   //metadata_startup_script = "${file("../_scripts/deploy-gcp-v2.sh")}"
