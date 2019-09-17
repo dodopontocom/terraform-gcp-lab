@@ -8,7 +8,7 @@ VM_EXTERNAL_IP=$(curl -H "Metadata-Flavor: Google" http://metadata/computeMetada
 DEBIAN_FRONTEND=noninteractive
 
 sudo apt-get install -y curl openssh-server ca-certificates
-sudo apt-get install -y postfix
+#sudo apt-get install -y postfix
 curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
 
 echo "============================= GITLAB INSTALLATION =========================================="
