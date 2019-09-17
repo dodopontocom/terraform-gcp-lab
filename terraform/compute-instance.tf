@@ -1,6 +1,7 @@
 resource "random_id" "instance_id" {
   byte_length = 4
 }
+
 resource "google_compute_address" "static-ip-address" {
   name = "static-ip-address"
 }
