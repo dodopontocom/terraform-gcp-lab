@@ -1,6 +1,9 @@
 resource "random_id" "instance_id" {
   byte_length = 4
 }
+resource "google_compute_address" "static-ip-address" {
+  name = "static-ip-address"
+}
 
 resource "google_compute_instance" "default" {
   name         = "vm-tf-${random_id.instance_id.hex}"
@@ -26,7 +29,7 @@ resource "google_compute_instance" "default" {
 
     access_config {
       // Include this section to give the VM an external ip address
-      nat_ip = "${google_compute_address.test-static-ip-address.address}"
+      nat_ip = "${google_compute_address.static-ip-address.address}"
     }
   }
 
