@@ -26,11 +26,12 @@ resource "google_compute_instance" "default" {
 
     access_config {
       // Include this section to give the VM an external ip address
+      nat_ip = "${google_compute_address.test-static-ip-address.address}"
     }
   }
 
   // Apply the firewall rule to allow external IPs to access this instance
-  tags = ["http-server"]
+  tags = ["http-server", "https-server"]
 }
 
 resource "google_compute_firewall" "http-server" {
@@ -44,7 +45,7 @@ resource "google_compute_firewall" "http-server" {
 
   // Allow traffic from everywhere to instances with an http-server tag
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["http-server", "https-server"]
+  target_tags   = ["http-server"]
 }
 
 output "ip" {
