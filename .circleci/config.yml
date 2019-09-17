@@ -12,7 +12,6 @@ defaults: &defaults
     TF_VAR_start_function_name: "startInstancePubSub"
     TF_VAR_stop_function_name: "stopInstancePubSub"
     TF_VAR_function_zip_name: "index.zip"
-    #TF_VAR_function_zip_source_file: "gcp-functions/index.zip"
     TF_VAR_function_zip_source_file: "/root/terraform-gcp-lab/gcp-functions/index.zip"
     TF_VAR_schedule_stop: "stop-job"
     TF_VAR_schedule_start: "start-job"
@@ -54,7 +53,6 @@ create-function-zip-template: &create-function-zip-template
     - run:
         name: "create and provide nodejs functions zip"
         command: |
-          ls -lrta
           zip gcp-functions/index.zip nodejs/scheduleinstance/*
     - persist_to_workspace:
         root: gcp-functions/
@@ -70,8 +68,6 @@ terraform-template: &terraform-template
     - run:
         name: "terraform provisioning"
         command: |
-          pwd
-          ls -lrta gcp-functions
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
           cd ${TERRAFORM_STR}
