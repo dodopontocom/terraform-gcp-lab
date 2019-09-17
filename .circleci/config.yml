@@ -21,6 +21,7 @@ defaults: &defaults
     TF_VAR_ubuntu_image: "ubuntu-os-cloud/ubuntu-1804-lts"
 
   working_directory: /root/terraform-gcp-lab
+  command: cat .circleci/definitions.sh >> $BASH_ENV
 only-releasable: &only-releasable
   filters:
     branches:
