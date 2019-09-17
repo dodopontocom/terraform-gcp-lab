@@ -1,5 +1,5 @@
 version: 2.1
-
+  
 defaults: &defaults
   environment:
     TF_VAR_gcp_bucket: "gcp-laboratories-tf-state"
@@ -15,8 +15,13 @@ defaults: &defaults
     TF_VAR_function_zip_source_file: "/root/terraform-gcp-lab/gcp-functions/index.zip"
     TF_VAR_schedule_stop: "stop-job"
     TF_VAR_schedule_start: "start-job"
-
+    #TF_VAR_machine_type: "f1-micro"
+    TF_VAR_machine_type: "n1-standard-4"
+    TF_VAR_zone: "us-central1-a"
+    TF_VAR_compute_instance_environment: "dev"
+    TF_VAR_ubuntu_image: "ubuntu-os-cloud/ubuntu-1804-lts"
   working_directory: /root/terraform-gcp-lab
+  
 only-releasable: &only-releasable
   filters:
     branches:
@@ -38,7 +43,10 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
   steps:
     - checkout
     - run:
-        name: "validate tf state bucket "
+        name: "Export terraform variables"
+        command: cat .circleci/tf-definitions.sh >> $BASH_ENV | source $BASH_ENV
+    - run:
+        name: "Validate tf state bucket "
         command: |
           echo ${GCP_SA} > ${TF_VAR_key}
           gcloud auth activate-service-account --key-file=${TF_VAR_key}
@@ -51,7 +59,7 @@ create-function-zip-template: &create-function-zip-template
   steps:
     - checkout
     - run:
-        name: "create and provide nodejs functions zip"
+        name: "Create and provide nodejs functions zip"
         command: |
           zip gcp-functions/index.zip nodejs/scheduleinstance/*
     - persist_to_workspace:
@@ -66,7 +74,7 @@ terraform-template: &terraform-template
     - attach_workspace:
         at: gcp-functions/
     - run:
-        name: "terraform provisioning"
+        name: "Terraform provisioning"
         command: |
           echo ${GCP_SA} > ${TF_VAR_key}
           export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}

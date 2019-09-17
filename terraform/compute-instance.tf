@@ -1,33 +1,41 @@
 resource "random_id" "instance_id" {
-  byte_length = 6
+  byte_length = 4
+}
+
+resource "google_compute_address" "static-ip-address" {
+  name = "static-ip-address"
 }
 
 resource "google_compute_instance" "default" {
   name         = "vm-tf-${random_id.instance_id.hex}"
-  machine_type = "f1-micro"
-  zone         = "us-central1-a"
+  machine_type = "${var.machine_type}"
+  zone         = "${var.zone}"
 
   labels       = {
-    "env" = "dev"
+    "env" = "${var.compute_instance_environment}"
   }
   
   boot_disk {
     initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-1804-lts"
+      image = "${var.ubuntu_image}"
     }
   }
-  //metadata_startup_script = "${file("../_scripts/deploy-gcp-v2.sh")}"
+  
+  allow_stopping_for_update = true
+  
+  metadata_startup_script = "${file("../scripts/git-lab-installation.sh")}"
 
   network_interface {
     network = "default"
 
     access_config {
       // Include this section to give the VM an external ip address
+      nat_ip = "${google_compute_address.static-ip-address.address}"
     }
   }
 
   // Apply the firewall rule to allow external IPs to access this instance
-  tags = ["http-server"]
+  tags = ["http-server", "https-server"]
 }
 
 resource "google_compute_firewall" "http-server" {
