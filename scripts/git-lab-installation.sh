@@ -11,5 +11,7 @@ VM_EXTERNAL_IP=$(curl -H "Metadata-Flavor: Google" http://metadata/computeMetada
 
 sudo EXTERNAL_URL="https://${VM_EXTERNAL_IP}" apt-get install -y gitlab-ce
 if [[ "$?" -ne 0 ]]; then
-  echo "============================= FAILED TO START GITLAB =========================================="
+  echo "============================= RE TRYING GITLAB INSTALLATION =========================================="
+  sudo dpkg --configure -a
+  sudo EXTERNAL_URL="https://${VM_EXTERNAL_IP}" apt-get install -y gitlab-ce
 fi
