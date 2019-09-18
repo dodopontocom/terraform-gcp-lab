@@ -24,7 +24,7 @@ pre-steps-template: &pre-steps-template
   command: |
     echo "export antes"
     export
-    cat .circleci/tf-definitions.sh >> ~/.bashrc | source ~/.bashrc
+    source .circleci/tf-definitions.sh
     echo "export depois"
     export
     echo ${GCP_SA} > ${TF_VAR_key}
