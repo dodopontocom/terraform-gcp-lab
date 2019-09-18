@@ -29,8 +29,10 @@ pre-steps-template: &pre-steps-template
     export
     echo ${GCP_SA} > ${TF_VAR_key}
     export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
-    gcloud auth activate-service-account --key-file=${TF_VAR_key}
-    gcloud config set project ${TF_VAR_project_id}
+    if [[ ${CIRCLE_JOB} != "tf_provisioning" ]]; then
+      gcloud auth activate-service-account --key-file=${TF_VAR_key}
+      gcloud config set project ${TF_VAR_project_id}
+    fi
 gcp-bucket-checker-template: &gcp-bucket-checker-template
   docker:
     - image: google/cloud-sdk
