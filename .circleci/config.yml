@@ -15,7 +15,6 @@ defaults: &defaults
     TF_VAR_function_zip_source_file: "/root/terraform-gcp-lab/gcp-functions/index.zip"
     TF_VAR_schedule_stop: "stop-job"
     TF_VAR_schedule_start: "start-job"
-    #TF_VAR_machine_type: "f1-micro"
     TF_VAR_machine_type: "n1-standard-4"
     TF_VAR_zone: "us-central1-a"
     TF_VAR_compute_instance_environment: "dev"
