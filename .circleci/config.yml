@@ -22,13 +22,8 @@ non-releasable: &non-releasable
 pre-steps-template: &pre-steps-template
   name: "Apply GCP credentials"
   command: |
-    echo "export antes"
-    export
     source .circleci/tf-definitions.sh
-    echo "export depois"
-    export
     echo ${GCP_SA} > ${TF_VAR_key}
-    export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
     if [[ ${CIRCLE_JOB} != "tf_provisioning" ]]; then
       gcloud auth activate-service-account --key-file=${TF_VAR_key}
       gcloud config set project ${TF_VAR_project_id}
