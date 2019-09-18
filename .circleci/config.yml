@@ -20,7 +20,6 @@ defaults: &defaults
     TF_VAR_compute_instance_environment: "dev"
     TF_VAR_ubuntu_image: "ubuntu-os-cloud/ubuntu-1804-lts"
   working_directory: /root/terraform-gcp-lab
-  
 only-releasable: &only-releasable
   filters:
     branches:
