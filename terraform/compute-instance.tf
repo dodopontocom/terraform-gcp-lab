@@ -48,7 +48,6 @@ resource "google_compute_firewall" "http-server" {
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["http-server", "https-server"]
 }
-
 output "ip" {
   value = "${google_compute_instance.gcp_lab_instance.network_interface.0.access_config.0.nat_ip}"
 }
