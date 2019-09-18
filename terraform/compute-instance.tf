@@ -22,7 +22,7 @@ resource "google_compute_instance" "gcp_lab_instance" {
   
   allow_stopping_for_update = true
   
-  metadata_startup_script = "${file("${var.startup-script}")}"
+  metadata_startup_script = "${file("${var.startup_script}")}"
 
   network_interface {
     network = "default"

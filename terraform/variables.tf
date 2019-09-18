@@ -21,3 +21,4 @@ variable "machine_type" { }
 variable "zone" { }
 variable "compute_instance_environment" { }
 variable "ubuntu_image" { }
+variable "startup_script" { }
