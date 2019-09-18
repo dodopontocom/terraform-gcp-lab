@@ -15,3 +15,4 @@ export TF_VAR_machine_type="f1-micro"
 export TF_VAR_zone="us-central1-a"
 export TF_VAR_compute_instance_environment="dev"
 export TF_VAR_ubuntu_image="ubuntu-os-cloud/ubuntu-1804-lts"
+export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
