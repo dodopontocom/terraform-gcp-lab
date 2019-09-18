@@ -1,7 +1,7 @@
 const request = require('request-promise')
 
 var telegram_url = "https://api.telegram.org/"
-//https://api.telegram.org/bot407633103:AAEtBhtw9En-Z_fcFil7bLbQHCXwxDwJAvA/sendMessage?chat_id=11504381&text=%22asd%22
+//https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=11504381&text=%22asd%22
 process.env.TELEGRAM_TOKEN
 process.env.TELEGRAM_CHAT_ID
 
