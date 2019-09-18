@@ -23,6 +23,7 @@ pre-steps-template: &pre-steps-template
   name: "Apply GCP credentials"
   command: |
     ls -lrta
+    pwd
     cat .circleci/tf-definitions.sh >> $BASH_ENV | source $BASH_ENV
     cat $BASH_ENV
     echo ${GCP_SA} > ${TF_VAR_key}
