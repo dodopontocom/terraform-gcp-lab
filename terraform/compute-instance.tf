@@ -4,7 +4,6 @@ resource "random_id" "instance_id" {
 resource "google_compute_address" "static_ip_address" {
   name = "static-ip-address"
 }
-
 resource "google_compute_instance" "gcp_lab_instance" {
   name         = "vm-tf-${random_id.instance_id.hex}"
   machine_type = "${var.machine_type}"
@@ -36,7 +35,6 @@ resource "google_compute_instance" "gcp_lab_instance" {
   // Apply the firewall rule to allow external IPs to access this instance
   tags = ["http-server", "https-server"]
 }
-
 resource "google_compute_firewall" "http-server" {
   name    = "default-allow-http"
   network = "default"
