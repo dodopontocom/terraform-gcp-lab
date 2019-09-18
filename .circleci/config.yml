@@ -28,6 +28,7 @@ pre-steps-template: &pre-steps-template
       gcloud auth activate-service-account --key-file=${TF_VAR_key}
       gcloud config set project ${TF_VAR_project_id}
     fi
+    export
 gcp-bucket-checker-template: &gcp-bucket-checker-template
   docker:
     - image: google/cloud-sdk
@@ -60,8 +61,8 @@ terraform-template: &terraform-template
     - image: hashicorp/terraform:light
   steps:
     - checkout
-    #- attach_workspace:
-    #    at: gcp-functions/
+    - attach_workspace:
+        at: gcp-functions/
     - run:
         <<: *pre-steps-template
     - run:
