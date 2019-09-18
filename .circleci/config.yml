@@ -98,7 +98,6 @@ terraform-template: &terraform-template
             terraform plan
             terraform apply --auto-approve
           fi
-
 jobs:
   tf_state_checker:
     <<: *defaults
