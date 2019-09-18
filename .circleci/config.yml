@@ -22,12 +22,10 @@ non-releasable: &non-releasable
 pre-steps-template: &pre-steps-template
   name: "Apply GCP credentials"
   command: |
-    source .circleci/tf-definitions.sh
+    source .circleci/cicd-definitions.sh
     echo ${GCP_SA} > ${TF_VAR_key}
-    if [[ ${CIRCLE_JOB} != "tf_provisioning" ]]; then
-      gcloud auth activate-service-account --key-file=${TF_VAR_key}
-      gcloud config set project ${TF_VAR_project_id}
-    fi
+    gcloud auth activate-service-account --key-file=${TF_VAR_key}
+    gcloud config set project ${TF_VAR_project_id}
 gcp-bucket-checker-template: &gcp-bucket-checker-template
   docker:
     - image: google/cloud-sdk
@@ -65,7 +63,7 @@ terraform-template: &terraform-template
     - run:
         name: "Terraform provisioning"
         command: |
-          source .circleci/tf-definitions.sh
+          source .circleci/cicd-definitions.sh
           echo ${GCP_SA} > ${TF_VAR_key}
           cd ${TERRAFORM_STR}
           if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-command\]") ]]; then

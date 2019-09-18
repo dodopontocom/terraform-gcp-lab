@@ -22,7 +22,7 @@ resource "google_compute_instance" "gcp_lab_instance" {
   
   allow_stopping_for_update = true
   
-  metadata_startup_script = "${file("../scripts/git-lab-installation.sh")}"
+  metadata_startup_script = "${file("${var.startup-script}")}"
 
   network_interface {
     network = "default"
