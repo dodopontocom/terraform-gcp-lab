@@ -14,3 +14,4 @@ For this custom command you need to use a pipe '|' and then the command as follo
 ``` sh
 $ git commit -m "[custom-command] | terraform init"
 ```
+
