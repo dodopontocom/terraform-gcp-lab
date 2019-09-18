@@ -28,8 +28,6 @@ pre-steps-template: &pre-steps-template
       gcloud auth activate-service-account --key-file=${TF_VAR_key}
       gcloud config set project ${TF_VAR_project_id}
     fi
-    echo "=-=-=-=-=-=-=-"
-    export
 gcp-bucket-checker-template: &gcp-bucket-checker-template
   docker:
     - image: google/cloud-sdk
@@ -65,13 +63,9 @@ terraform-template: &terraform-template
     - attach_workspace:
         at: gcp-functions/
     - run:
-        <<: *pre-steps-template
-    - run:
         name: "Terraform provisioning"
         command: |
-          export
-          ls -lrta
-          pwd
+          source .circleci/tf-definitions.sh
           cd ${TERRAFORM_STR}
           if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-command\]") ]]; then
             echo "Attention, custom command flag detected!"
@@ -114,5 +108,5 @@ workflows:
             - tf_state_checker
       - tf_provisioning:
           <<: *only-releasable
-          #requires:
-          #  - create_zip_file
+          requires:
+            - create_zip_file
