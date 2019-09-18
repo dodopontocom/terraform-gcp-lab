@@ -65,10 +65,8 @@ terraform-template: &terraform-template
     - run:
         name: "Terraform provisioning"
         command: |
-          ls -lrta
-          ls -lrta credentials
-          pwd
           source .circleci/tf-definitions.sh
+          echo ${GCP_SA} > ${TF_VAR_key}
           cd ${TERRAFORM_STR}
           if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-command\]") ]]; then
             echo "Attention, custom command flag detected!"
