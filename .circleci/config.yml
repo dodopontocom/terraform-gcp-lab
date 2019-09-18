@@ -22,8 +22,9 @@ non-releasable: &non-releasable
 pre-steps-template: &pre-steps-template
   name: "Apply GCP credentials"
   command: |
+    echo "${TF_VAR_key}"
     cat .circleci/tf-definitions.sh >> $BASH_ENV | source $BASH_ENV
-    echo ${GCP_SA} > /root/terraform-gcp-lab/credentials/credential.json
+    echo ${GCP_SA} > ${TF_VAR_key}
     export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
     gcloud auth activate-service-account --key-file=${TF_VAR_key}
     gcloud config set project ${TF_VAR_project_id}
