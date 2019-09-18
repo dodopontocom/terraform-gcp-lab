@@ -60,8 +60,8 @@ terraform-template: &terraform-template
     - image: hashicorp/terraform:light
   steps:
     - checkout
-    - attach_workspace:
-        at: gcp-functions/
+    #- attach_workspace:
+    #    at: gcp-functions/
     - run:
         <<: *pre-steps-template
     - run:
