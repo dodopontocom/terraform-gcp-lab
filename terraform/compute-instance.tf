@@ -1,12 +1,11 @@
 resource "random_id" "instance_id" {
   byte_length = 4
 }
-
-resource "google_compute_address" "static-ip-address" {
+resource "google_compute_address" "static_ip_address" {
   name = "static-ip-address"
 }
 
-resource "google_compute_instance" "default" {
+resource "google_compute_instance" "gcp_lab_instance" {
   name         = "vm-tf-${random_id.instance_id.hex}"
   machine_type = "${var.machine_type}"
   zone         = "${var.zone}"
@@ -30,7 +29,7 @@ resource "google_compute_instance" "default" {
 
     access_config {
       // Include this section to give the VM an external ip address
-      nat_ip = "${google_compute_address.static-ip-address.address}"
+      nat_ip = "${google_compute_address.static_ip_address.address}"
     }
   }
 
@@ -53,5 +52,5 @@ resource "google_compute_firewall" "http-server" {
 }
 
 output "ip" {
-  value = "${google_compute_instance.default.network_interface.0.access_config.0.nat_ip}"
+  value = "${google_compute_instance.gcp_lab_instance.network_interface.0.access_config.0.nat_ip}"
 }

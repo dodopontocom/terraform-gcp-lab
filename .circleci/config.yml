@@ -15,13 +15,11 @@ defaults: &defaults
     TF_VAR_function_zip_source_file: "/root/terraform-gcp-lab/gcp-functions/index.zip"
     TF_VAR_schedule_stop: "stop-job"
     TF_VAR_schedule_start: "start-job"
-    #TF_VAR_machine_type: "f1-micro"
-    TF_VAR_machine_type: "n1-standard-4"
+    TF_VAR_machine_type: "f1-micro"
     TF_VAR_zone: "us-central1-a"
     TF_VAR_compute_instance_environment: "dev"
     TF_VAR_ubuntu_image: "ubuntu-os-cloud/ubuntu-1804-lts"
   working_directory: /root/terraform-gcp-lab
-  
 only-releasable: &only-releasable
   filters:
     branches:
@@ -61,7 +59,9 @@ create-function-zip-template: &create-function-zip-template
     - run:
         name: "Create and provide nodejs functions zip"
         command: |
-          zip gcp-functions/index.zip nodejs/scheduleinstance/*
+          cd nodejs-functions/scheduleinstance/
+          zip ../../gcp-functions/index.zip *
+          cd -
     - persist_to_workspace:
         root: gcp-functions/
         paths:
@@ -90,6 +90,7 @@ terraform-template: &terraform-template
             echo "======== Destroying GCP Resources ========"
             terraform destroy --auto-approve
           else
+            echo "Standard Deploy"
             TERRAFORM_APP_ENGINE_FILE=./scheduler.tf
             APP_ENGINE_RESOURCE_NAME=$(cat ${TERRAFORM_APP_ENGINE_FILE} | grep -m 1 resource | awk '{gsub("\"",""); print $2 "." $3}')
             terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
@@ -97,7 +98,6 @@ terraform-template: &terraform-template
             terraform plan
             terraform apply --auto-approve
           fi
-
 jobs:
   tf_state_checker:
     <<: *defaults
