@@ -59,7 +59,7 @@ create-function-zip-template: &create-function-zip-template
     - run:
         name: "Create and provide nodejs functions zip"
         command: |
-          zip gcp-functions/index.zip nodejs/scheduleinstance/*
+          zip gcp-functions/index.zip nodejs-functions/scheduleinstance/*
     - persist_to_workspace:
         root: gcp-functions/
         paths:
