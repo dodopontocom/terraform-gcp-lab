@@ -4,7 +4,6 @@ resource "random_id" "instance_id" {
 resource "google_compute_address" "static_ip_address" {
   name = "static-ip-address"
 }
-
 resource "google_compute_instance" "gcp_lab_instance" {
   name         = "vm-tf-${random_id.instance_id.hex}"
   machine_type = "${var.machine_type}"
@@ -22,7 +21,7 @@ resource "google_compute_instance" "gcp_lab_instance" {
   
   allow_stopping_for_update = true
   
-  metadata_startup_script = "${file("../scripts/git-lab-installation.sh")}"
+  metadata_startup_script = "${file("${var.startup_script}")}"
 
   network_interface {
     network = "default"
@@ -36,21 +35,19 @@ resource "google_compute_instance" "gcp_lab_instance" {
   // Apply the firewall rule to allow external IPs to access this instance
   tags = ["http-server", "https-server"]
 }
-
 resource "google_compute_firewall" "http-server" {
   name    = "default-allow-http"
   network = "default"
 
   allow {
     protocol = "tcp"
-    ports    = ["80"]
+    ports    = ["80", 8080]
   }
 
   // Allow traffic from everywhere to instances with an http-server tag
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["http-server"]
+  target_tags   = ["http-server", "https-server"]
 }
-
 output "ip" {
   value = "${google_compute_instance.gcp_lab_instance.network_interface.0.access_config.0.nat_ip}"
 }
