@@ -80,7 +80,7 @@ terraform-template: &terraform-template
             terraform plan
             terraform apply --auto-approve
             
-          if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-command\]") ]]; then
+          elif [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-command\]") ]]; then
             echo "Attention, custom command flag detected!"
             terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
             echo "======== Validating the command ========"
@@ -94,6 +94,7 @@ terraform-template: &terraform-template
             echo "Custom VM startup script was not provided"
             echo "Please, use the following example in the commit message:"
             echo "anythin bla bla [custom-vm\] | <script name provided in scripts folder>.sh"
+            exit -1
           fi
 jobs:
   tf_state_checker:
