@@ -22,7 +22,7 @@ non-releasable: &non-releasable
 pre-steps-template: &pre-steps-template
   name: "Apply GCP credentials"
   command: |
-    source .circleci/cicd-definitions.sh
+    source .circleci/utils.sh
     echo ${GCP_SA} > ${TF_VAR_key}
     gcloud auth activate-service-account --key-file=${TF_VAR_key}
     gcloud config set project ${TF_VAR_project_id}
@@ -63,22 +63,28 @@ terraform-template: &terraform-template
     - run:
         name: "Terraform provisioning"
         command: |
-          source .circleci/cicd-definitions.sh
+          source .circleci/utils.sh
           echo ${GCP_SA} > ${TF_VAR_key}
           cd ${TERRAFORM_STR}
           if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-vm\]") ]]; then
-            terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
-            echo "======== Validating the command ========"
             export STARTUP_SCRIPT="$(git log --format=oneline -n 1 ${CIRCLE_SHA1} | cut -d'|' -f2-)"
-            source ../.circleci/cicd-definitions.sh
+            if [[ -f ${ROOTDIR}/scripts/${STARTUP_SCRIPT} ]]; then
+              terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
+              echo "======== Validating the command ========"
             
-            echo "Solution Deployment"
-            TERRAFORM_APP_ENGINE_FILE=./scheduler.tf
-            APP_ENGINE_RESOURCE_NAME=$(cat ${TERRAFORM_APP_ENGINE_FILE} | grep -m 1 resource | awk '{gsub("\"",""); print $2 "." $3}')
-            terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
-            terraform import ${APP_ENGINE_RESOURCE_NAME} ${TF_VAR_project_id} || true
-            terraform plan
-            terraform apply --auto-approve
+              source ${ROOTDIR}/.circleci/cicd-definitions.sh
+            
+              echo "Solution Deployment"
+              TERRAFORM_APP_ENGINE_FILE=./scheduler.tf
+              APP_ENGINE_RESOURCE_NAME=$(cat ${TERRAFORM_APP_ENGINE_FILE} | grep -m 1 resource | awk '{gsub("\"",""); print $2 "." $3}')
+              terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
+              terraform import ${APP_ENGINE_RESOURCE_NAME} ${TF_VAR_project_id} || true
+              terraform plan
+              terraform apply --auto-approve
+            else
+              echo "Could not find script file"
+              echo "Exiting"
+            fi
             
           elif [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-command\]") ]]; then
             echo "Attention, custom command flag detected!"
