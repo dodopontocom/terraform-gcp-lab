@@ -64,8 +64,6 @@ terraform-template: &terraform-template
         name: "Terraform provisioning"
         command: |
           source .circleci/utils.sh
-          export
-          echo $ROOTDIR
           echo ${GCP_SA} > ${TF_VAR_key}
           cd ${TERRAFORM_STR}
           if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-vm\]") ]]; then
@@ -74,7 +72,7 @@ terraform-template: &terraform-template
               terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
               echo "======== Validating the command ========"
             
-              source ${ROOTDIR}/.circleci/cicd-definitions.sh
+              source .circleci/utils.sh
             
               echo "Solution Deployment"
               TERRAFORM_APP_ENGINE_FILE=./scheduler.tf
