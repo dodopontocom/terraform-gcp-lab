@@ -68,11 +68,11 @@ terraform-template: &terraform-template
           cd ${TERRAFORM_STR}
           if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-vm\]") ]]; then
             export STARTUP_SCRIPT="$(git log --format=oneline -n 1 ${CIRCLE_SHA1} | cut -d'|' -f2-)"
-            if [[ -f ${ROOTDIR}/scripts/${STARTUP_SCRIPT} ]]; then
+            if [[ -f ../scripts/${STARTUP_SCRIPT} ]]; then
               terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
               echo "======== Validating the command ========"
             
-              source .circleci/utils.sh
+              source ../circleci/utils.sh
             
               echo "Solution Deployment"
               TERRAFORM_APP_ENGINE_FILE=./scheduler.tf
