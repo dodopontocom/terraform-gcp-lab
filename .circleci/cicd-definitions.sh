@@ -15,7 +15,7 @@ export TF_VAR_machine_type="n1-standard-4"
 export TF_VAR_zone="us-central1-a"
 export TF_VAR_compute_instance_environment="dev"
 export TF_VAR_ubuntu_image="ubuntu-os-cloud/ubuntu-1804-lts"
-export TF_VAR_startup_script="../scripts/hadoop-lab-sample.sh"
+export TF_VAR_startup_script="../scripts/${STARTUP_SCRIPT}"
 
 # GCLOUD service account credentials path
 export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
