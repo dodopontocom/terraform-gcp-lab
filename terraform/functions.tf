@@ -1,16 +1,15 @@
-resource "google_storage_bucket_object" "function-zip" {
+resource "google_storage_bucket_object" "function_zip" {
   name   = "${var.function_zip_name}"
   bucket = "${var.gcp_bucket}"
   source = "${var.function_zip_source_file}"
 }
-
 resource "google_cloudfunctions_function" "function-start" {
   name                  = "${var.start_function_name}"
   description           = "Start VM function"
   runtime               = "nodejs8"
   source_archive_bucket = "${var.gcp_bucket}"
-  source_archive_object = "${google_storage_bucket_object.function-zip.name}"
-  //entry_point           = "helloGET"
+  source_archive_object = "${google_storage_bucket_object.function_zip.name}"
+  entry_point           = "startInstancePubSub"
 
   event_trigger {
     event_type = "google.pubsub.topic.publish"
@@ -20,13 +19,13 @@ resource "google_cloudfunctions_function" "function-start" {
   available_memory_mb   = 128
   timeout               = 60
 }
-
 resource "google_cloudfunctions_function" "function-stop" {
   name                  = "${var.stop_function_name}"
   description           = "Start VM function"
   runtime               = "nodejs8"
   source_archive_bucket = "${var.gcp_bucket}"
-  source_archive_object = "${google_storage_bucket_object.function-zip.name}"
+  source_archive_object = "${google_storage_bucket_object.function_zip.name}"
+  entry_point           = "stopInstancePubSub"
 
   event_trigger {
     event_type = "google.pubsub.topic.publish"
