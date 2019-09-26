@@ -66,6 +66,20 @@ terraform-template: &terraform-template
           source .circleci/cicd-definitions.sh
           echo ${GCP_SA} > ${TF_VAR_key}
           cd ${TERRAFORM_STR}
+          if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-vm\]") ]]; then
+            terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
+            echo "======== Validating the command ========"
+            export STARTUP_SCRIPT="$(git log --format=oneline -n 1 ${CIRCLE_SHA1} | cut -d'|' -f2-)"
+            source .circleci/cicd-definitions.sh
+            
+            echo "Solution Deployment"
+            TERRAFORM_APP_ENGINE_FILE=./scheduler.tf
+            APP_ENGINE_RESOURCE_NAME=$(cat ${TERRAFORM_APP_ENGINE_FILE} | grep -m 1 resource | awk '{gsub("\"",""); print $2 "." $3}')
+            terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
+            terraform import ${APP_ENGINE_RESOURCE_NAME} ${TF_VAR_project_id} || true
+            terraform plan
+            terraform apply --auto-approve
+            
           if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-command\]") ]]; then
             echo "Attention, custom command flag detected!"
             terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
@@ -77,13 +91,9 @@ terraform-template: &terraform-template
             echo "======== Destroying GCP Resources ========"
             terraform destroy --auto-approve
           else
-            echo "Standard Deploy"
-            TERRAFORM_APP_ENGINE_FILE=./scheduler.tf
-            APP_ENGINE_RESOURCE_NAME=$(cat ${TERRAFORM_APP_ENGINE_FILE} | grep -m 1 resource | awk '{gsub("\"",""); print $2 "." $3}')
-            terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
-            terraform import ${APP_ENGINE_RESOURCE_NAME} ${TF_VAR_project_id} || true
-            terraform plan
-            terraform apply --auto-approve
+            echo "Custom VM startup script was not provided"
+            echo "Please, use the following example in the commit message:"
+            echo "anythin bla bla [custom-vm\] | <script name provided in scripts folder>.sh"
           fi
 jobs:
   tf_state_checker:
