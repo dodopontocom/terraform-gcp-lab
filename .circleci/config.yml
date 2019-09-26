@@ -70,7 +70,7 @@ terraform-template: &terraform-template
             terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
             echo "======== Validating the command ========"
             export STARTUP_SCRIPT="$(git log --format=oneline -n 1 ${CIRCLE_SHA1} | cut -d'|' -f2-)"
-            source .circleci/cicd-definitions.sh
+            source ../.circleci/cicd-definitions.sh
             
             echo "Solution Deployment"
             TERRAFORM_APP_ENGINE_FILE=./scheduler.tf
