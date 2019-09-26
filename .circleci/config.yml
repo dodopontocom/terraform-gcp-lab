@@ -69,12 +69,11 @@ terraform-template: &terraform-template
           if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-vm\]") ]]; then
             export STARTUP_SCRIPT="$(git log --format=oneline -n 1 ${CIRCLE_SHA1} | cut -d'|' -f2-)"
             if [[ -f ../scripts/${STARTUP_SCRIPT} ]]; then
+              source ../.circleci/utils.sh
+              
               terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
-              echo "======== Validating the command ========"
             
-              source ../circleci/utils.sh
-            
-              echo "Solution Deployment"
+              echo "======== Solution Deployment ========"
               TERRAFORM_APP_ENGINE_FILE=./scheduler.tf
               APP_ENGINE_RESOURCE_NAME=$(cat ${TERRAFORM_APP_ENGINE_FILE} | grep -m 1 resource | awk '{gsub("\"",""); print $2 "." $3}')
               terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
@@ -84,22 +83,23 @@ terraform-template: &terraform-template
             else
               echo "Could not find script file"
               echo "Exiting"
+              exit -1
             fi
             
           elif [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-command\]") ]]; then
             echo "Attention, custom command flag detected!"
             terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
-            echo "======== Validating the command ========"
+            echo "======== Validating the custom command ========"
             $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | cut -d'|' -f2-)
           elif [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[tf-destroy\]") ]]; then
-            echo "Attention, destroy flag detected!"
+            echo ""======== Attention, destroy flag detected! ========"
             terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=${TERRAFORM_STR}"
             echo "======== Destroying GCP Resources ========"
             terraform destroy --auto-approve
           else
-            echo "Custom VM startup script was not provided"
+            echo ""======== Custom VM startup script was not provided ========"
             echo "Please, use the following example in the commit message:"
-            echo "anythin bla bla [custom-vm\] | <script name provided in scripts folder>.sh"
+            echo "anything else [custom-vm] |<script name provided in scripts folder>.sh"
             exit -1
           fi
 jobs:
