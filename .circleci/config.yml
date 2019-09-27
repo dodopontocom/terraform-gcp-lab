@@ -2,7 +2,7 @@ version: 2.1
 defaults: &defaults
   environment:
     TERRAFORM_STR: "terraform"
-  working_directory: /root/${GCLOUD_PROJECT_ID}
+  working_directory: /root/"${GCLOUD_PROJECT_ID}"
 only-releasable: &only-releasable
   filters:
     branches:
