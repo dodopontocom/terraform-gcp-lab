@@ -21,7 +21,7 @@ non-releasable: &non-releasable
 pre-steps-template: &pre-steps-template
   name: "Apply GCP credentials"
   command: |
-    source .circleci/utils.sh
+    source .circleci/cicd-definitions.sh
     echo ${DODRONES_GCP_MY_LABS_SA} > ${TF_VAR_key}
     gcloud auth activate-service-account --key-file=${TF_VAR_key}
     gcloud config set project ${TF_VAR_project_id}
@@ -62,13 +62,13 @@ terraform-template: &terraform-template
     - run:
         name: "Terraform provisioning"
         command: |
-          source .circleci/utils.sh
+          source .circleci/cicd-definitions.sh
           echo ${DODRONES_GCP_MY_LABS_SA} > ${TF_VAR_key}
           cd terraform/
           if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-vm\]") ]]; then
             export STARTUP_SCRIPT="$(git log --format=oneline -n 1 ${CIRCLE_SHA1} | cut -d'|' -f2-)"
             if [[ -f ../scripts/${STARTUP_SCRIPT} ]]; then
-              source ../.circleci/utils.sh
+              source ../.circleci/cicd-definitions.sh
               
               terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=terraform"
             
