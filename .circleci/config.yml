@@ -21,9 +21,6 @@ non-releasable: &non-releasable
 pre-steps-template: &pre-steps-template
   name: "Apply GCP credentials"
   command: |
-    ls -lrta
-    pwd
-    export
     source .circleci/cicd-definitions.sh
     echo ${DODRONES_GCP_MY_LABS_SA} > ${TF_VAR_key}
     gcloud auth activate-service-account --key-file=${TF_VAR_key}
