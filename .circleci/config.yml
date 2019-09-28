@@ -22,7 +22,6 @@ pre-steps-template: &pre-steps-template
   name: "Apply GCP credentials"
   command: |
     source .circleci/cicd-definitions.sh
-    touch ${TF_VAR_key}
     echo ${DODRONES_GCP_MY_LABS_SA} > ${TF_VAR_key}
     gcloud auth activate-service-account --key-file=${TF_VAR_key}
     gcloud config set project ${TF_VAR_project_id}
