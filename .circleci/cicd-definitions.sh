@@ -1,3 +1,4 @@
+#!/bin/bash
 # Terraform variables
 
 # Gcloud project id
