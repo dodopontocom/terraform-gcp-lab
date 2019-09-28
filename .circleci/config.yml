@@ -2,7 +2,7 @@ version: 2.1
 defaults: &defaults
   environment:
     TERRAFORM_STR: "terraform"
-  working_directory: ~/app
+  working_directory: /root/app
 only-releasable: &only-releasable
   filters:
     branches:
