@@ -3,7 +3,7 @@
 # Gcloud project id
 export GCLOUD_PROJECT_ID="gcp-my-labs"
 
-export TF_VAR_gcp_bucket="terraform-${GCLOUD_PROJECT_ID}a"
+export TF_VAR_gcp_bucket="terraform-${GCLOUD_PROJECT_ID}"
 export TF_VAR_project_id="${GCLOUD_PROJECT_ID}"
 export TF_VAR_region="us-central1"
 export TF_VAR_key="${CIRCLE_WORKING_DIRECTORY}/credentials/credential.json"
