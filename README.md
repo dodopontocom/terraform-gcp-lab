@@ -35,4 +35,4 @@ For this custom command you need to use a pipe '|' and then the command as follo
 $ git commit -m "[custom-command] | terraform init"
 ```
 
-< to be edited >
+[custom-vm]|script_name.sh
