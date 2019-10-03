@@ -11,7 +11,7 @@ resource "google_cloud_scheduler_job" "start_job" {
   time_zone = "America/Sao_Paulo"
 
   pubsub_target {
-    topic_name = "projects/gcp-laboratories/topics/start-instance-event"
+    topic_name = "projects/${var.project_id}/topics/start-instance-event"
     data = "${base64encode("{\"zone\":\"us-central1-a\", \"label\":\"env=dev\"}")}"
   }
   
