@@ -1,9 +1,11 @@
 resource "random_id" "instance_id" {
   byte_length = 4
 }
+
 resource "google_compute_address" "static_ip_address" {
   name = "static-ip-address"
 }
+
 resource "google_compute_instance" "gcp_lab_instance" {
   name         = "vm-tf-${random_id.instance_id.hex}"
   machine_type = "${var.machine_type}"
@@ -11,6 +13,11 @@ resource "google_compute_instance" "gcp_lab_instance" {
 
   labels       = {
     "env" = "${var.compute_instance_environment}"
+  }
+  
+  attached_disk {
+    source      = "${google_compute_disk.default_persistent_disk.name}"
+    device_name = "${google_compute_disk.default_persistent_disk.name}"
   }
   
   boot_disk {
@@ -50,4 +57,12 @@ resource "google_compute_firewall" "http-server" {
 }
 output "ip" {
   value = "${google_compute_instance.gcp_lab_instance.network_interface.0.access_config.0.nat_ip}"
+}
+
+resource "google_compute_disk" "default_persistent_disk" {
+  name                      = "data-ssd"
+  type                      = "pd-ssd"
+  size                      = "10"
+  zone                      = "us-central1-a"
+  physical_block_size_bytes = 4096
 }
