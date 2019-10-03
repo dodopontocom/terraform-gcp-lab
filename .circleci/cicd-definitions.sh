@@ -21,6 +21,7 @@ export TF_VAR_zone="us-central1-a"
 export TF_VAR_compute_instance_environment="dev"
 export TF_VAR_ubuntu_image="ubuntu-os-cloud/ubuntu-1804-lts"
 export TF_VAR_startup_script="${CIRCLE_WORKING_DIRECTORY}/scripts/${STARTUP_SCRIPT}"
+export TF_VAR_ssd_name="data-ssd"
 
 # GCLOUD service account credentials path
 export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
