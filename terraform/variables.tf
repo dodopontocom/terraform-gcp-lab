@@ -22,3 +22,4 @@ variable "zone" { }
 variable "compute_instance_environment" { }
 variable "ubuntu_image" { }
 variable "startup_script" { }
+variable "ssd_name" { }
