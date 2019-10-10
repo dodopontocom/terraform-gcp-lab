@@ -65,7 +65,13 @@ terraform-template: &terraform-template
           source .circleci/cicd-definitions.sh
           echo ${DODRONES_GCP_MY_LABS_SA} > ${TF_VAR_key}
           cd terraform/
-          if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-vm\]") ]]; then
+          if [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[tf-destroy\]") ]]; then
+            echo ""======== Attention, destroy flag detected! ========"
+            terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=terraform"
+            echo "======== Destroying GCP Resources ========"
+            terraform destroy --auto-approve
+            echo "oK"
+          elif [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[custom-vm\]") ]]; then
             export STARTUP_SCRIPT="$(git log --format=oneline -n 1 ${CIRCLE_SHA1} | cut -d'|' -f2-)"
             if [[ -f ../scripts/${STARTUP_SCRIPT} ]]; then
               source ../.circleci/cicd-definitions.sh
@@ -90,11 +96,6 @@ terraform-template: &terraform-template
             terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=terraform"
             echo "======== Validating the custom command ========"
             $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | cut -d'|' -f2-)
-          elif [[ $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -Eo "\[tf-destroy\]") ]]; then
-            echo ""======== Attention, destroy flag detected! ========"
-            terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=terraform"
-            echo "======== Destroying GCP Resources ========"
-            terraform destroy --auto-approve
           else
             echo ""======== Custom VM startup script was not provided ========"
             echo "Please, use the following example in the commit message:"
