@@ -2,6 +2,8 @@
 
 echo "=============== START - MOUNT PERSISTENT DISK ==============="
 
+#UBUNTU LIKE SYSTEMS
+
 mount_point="/data"
 ssd_by_id="google-${TF_VAR_ssd_name}"
 
@@ -9,7 +11,7 @@ ssd_by_id="google-${TF_VAR_ssd_name}"
 sudo mount /dev/disk/by-id/${ssd_by_id} ${mount_point}
 if [[ $? -ne 0 ]]; then
   echo "Formatting persistent disk."
-  mkfs.ext4 -m 0 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/disk/by-id/${ssd_by_id}
+  sudo mkfs.ext4 -m 0 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/disk/by-id/${ssd_by_id}
   echo "Creating influxdb folder to be used in persistent disk."
   echo "Mounting point for persistent disk."
   echo UUID=$(sudo blkid -s UUID -o value /dev/disk/by-id/${ssd_by_id}) ${mount_point} ext4 discard,defaults,nofail 0 2 | sudo tee -a /etc/fstab
