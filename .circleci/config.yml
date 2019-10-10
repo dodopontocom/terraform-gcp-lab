@@ -66,7 +66,7 @@ terraform-template: &terraform-template
           echo ${DODRONES_GCP_MY_LABS_SA} > ${TF_VAR_key}
           cd terraform/
           if [[ "$(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -E "\[tf-destroy\]")" ]]; then
-            echo ""======== Attention, destroy flag detected! ========"
+            echo "======== Attention, destroy flag detected! ========"
             terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=terraform"
             echo "======== Destroying GCP Resources ========"
             terraform destroy --auto-approve
@@ -87,7 +87,7 @@ terraform-template: &terraform-template
               terraform apply --auto-approve
             else
               echo "Could not find script file"
-              echo "Exiting"
+              echo "Exiting..."
             fi
           fi  
           if [[ "$(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -E "\[custom-command\]")" ]]; then
