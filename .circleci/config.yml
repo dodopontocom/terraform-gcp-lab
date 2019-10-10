@@ -1,5 +1,4 @@
 version: 2.1
-
 defaults: &defaults
   environment:
     TERRAFORM_STR: "terraform"
