@@ -13,7 +13,7 @@ if [[ $? -ne 0 ]]; then
 fi
   
 sudo yum install -y curl policycoreutils-python openssh-server openssh-clients cronie lokkit
-sudo lokkit -s http -s ssh
+#sudo lokkit -s http -s ssh
 
 sudo yum install -y postfix
 sudo service postfix start
