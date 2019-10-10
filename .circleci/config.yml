@@ -99,7 +99,6 @@ terraform-template: &terraform-template
             echo ""======== Custom VM startup script was not provided ========"
             echo "Please, use the following example in the commit message:"
             echo "anything else [custom-vm] |<script name provided in scripts folder>.sh"
-            exit -1
           fi
 jobs:
   tf_state_checker:
