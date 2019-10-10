@@ -18,3 +18,5 @@ if [[ "$?" -ne 0 ]]; then
   sudo dpkg --configure -a
   sudo EXTERNAL_URL="https://${VM_EXTERNAL_IP}" apt-get install -y gitlab-ce
 fi
+
+echo "============================= STARTUP SCRIPT ENDS =========================================="
