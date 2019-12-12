@@ -18,5 +18,6 @@ cd ${project_name}
 echo "-=-"
 echo -e ${DEFINITIONS} > .definitions.sh
 echo "=-="
+
 sudo docker build -t bot .
 sudo docker run -i --name bot bot
