@@ -30,3 +30,4 @@ export TF_VAR_schedule_stop="stop-job"
 export TF_VAR_schedule_start="start-job"
 
 export TF_VAR_TELEGRAM_TOKEN="${TELEGRAM_TOKEN}"
+export TF_VAR_NOTIFICATION_IDS="${NOTIFICATION_IDS}"
