@@ -28,7 +28,7 @@ resource "google_compute_firewall" "http-server" {
 In order to have custom builds it is possible to commit with special messages  
 `[skip ci]` <- built in flag that skips pipeline trigger  
 `[tf-destroy]` <- triggers the pipeline to run 'terraform destroy' which will shutdown current GCP infrastructure  
-
+`[custom-vm]|<script_name.sh>` <- triggers the pipeline creating the VM instance with script provided as startup script  
 `[custom-command]` <- triggers the pipeline and runs the command specified  
 For this custom command you need to use a pipe '|' and then the command as follow as an example:  
 
