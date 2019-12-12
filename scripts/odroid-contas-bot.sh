@@ -15,6 +15,8 @@ sudo apt-get install -y docker-ce
 #clone repository for hadoop lab sample
 git clone ${git_clone_url}
 cd ${project_name}
-echo ${DEFINITIONS} > .definitions.sh
+echo "-=-"
+echo -e ${DEFINITIONS} > .definitions.sh
+echo "=-="
 sudo docker build -t bot .
 sudo docker run -i --name bot bot
