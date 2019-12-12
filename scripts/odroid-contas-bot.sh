@@ -17,4 +17,4 @@ git clone ${git_clone_url}
 cd ${project_name}
 echo '${DEFINITIONS}' > .definitions.sh
 sudo docker build -t bot .
-sudo docker run -it --name bot bot
+sudo docker run -i --name bot bot
