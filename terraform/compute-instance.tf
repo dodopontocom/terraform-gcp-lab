@@ -29,7 +29,7 @@ resource "google_compute_instance" "gcp_lab_instance" {
   allow_stopping_for_update = true
   
   metadata = {
-    TELEGRAM_TOKEN = ${TELEGRAM_TOKEN}
+    TELEGRAM_TOKEN = "${TELEGRAM_TOKEN}"
     NOTIFICATION_IDS= 11504381
   }
 
