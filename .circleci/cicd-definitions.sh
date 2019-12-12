@@ -28,3 +28,5 @@ export TF_VAR_function_zip_source_file="${CIRCLE_WORKING_DIRECTORY}/gcp-function
 
 export TF_VAR_schedule_stop="stop-job"
 export TF_VAR_schedule_start="start-job"
+
+export TF_VAR_TELEGRAM_TOKEN="${TELEGRAM_TOKEN}"
