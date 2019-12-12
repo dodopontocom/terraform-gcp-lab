@@ -3,6 +3,10 @@
 project_name="odroid-contas"
 git_clone_url="https://github.com/dodopontocom/${project_name}.git"
 
+# Exporting variables, retrieved from Metadata
+export TELEGRAM_TOKEN=$(curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/attributes/TELEGRAM_TOKEN)
+export NOTIFICATION_IDS=$(curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/attributes/NOTIFICATION_IDS)
+
 #install docker
 sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
