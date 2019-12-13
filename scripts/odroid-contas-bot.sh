@@ -46,4 +46,4 @@ export STATS_LOG_PATH="/home/odroid/telegram_bots_logs/contas_"
 
 #run bot in docker
 sudo docker build -t bot .
-sudo docker run -i --name bot bot
+sudo docker run -i --restart unless-stopped --name bot bot
