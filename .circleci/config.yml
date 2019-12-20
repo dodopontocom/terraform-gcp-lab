@@ -46,7 +46,9 @@ create-function-zip-template: &create-function-zip-template
     - run:
         name: "Create and provide nodejs functions zip"
         command: |
-          cd nodejs-functions/scheduleinstance/
+          source .circleci/cicd-definitions.sh
+          git clone ${SCHEDULE_INSTANCE_NODE_FUNCTION}
+          cd nodejs-docs-samples/functions/scheduleinstance/
           zip ../../gcp-functions/index.zip *
           cd -
     - persist_to_workspace:
