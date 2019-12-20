@@ -6,6 +6,9 @@ export GCLOUD_PROJECT_ID="gcp-my-labs"
 # GCLOUD service account credentials path
 export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
 
+# Google Nodejs Schedule instance sample clone url
+export SCHEDULE_INSTANCE_NODE_FUNCTION="https://github.com/GoogleCloudPlatform/nodejs-docs-samples.git"
+
 # Terraform variables
 export TF_VAR_gcp_bucket="terraform-${GCLOUD_PROJECT_ID}"
 export TF_VAR_project_id="${GCLOUD_PROJECT_ID}"
