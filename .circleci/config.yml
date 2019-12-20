@@ -11,7 +11,7 @@ only-releasable: &only-releasable
         - master
         - develop
         - patch
-        - feature/devops
+        - feature/clone-node-functions
 non-releasable: &non-releasable
   filters:
     branches:
