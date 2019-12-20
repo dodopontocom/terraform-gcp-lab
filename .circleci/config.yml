@@ -96,7 +96,6 @@ terraform-template: &terraform-template
             terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=terraform"
             echo "======== Validating the custom command ========"
             $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | cut -d'|' -f2-)
-          fi
           else
             echo "No startup script set"
           fi
