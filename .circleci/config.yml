@@ -91,7 +91,7 @@ terraform-template: &terraform-template
               echo "Could not find script file"
               echo "Exiting..."
             fi
-          elfi [[ "$(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -E "\[custom-command\]")" ]]; then
+          elif [[ "$(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -E "\[custom-command\]")" ]]; then
             echo "Attention, custom command flag detected!"
             terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=terraform"
             echo "======== Validating the custom command ========"
