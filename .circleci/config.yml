@@ -11,7 +11,6 @@ only-releasable: &only-releasable
         - master
         - develop
         - patch
-        - feature/clone-node-functions
 non-releasable: &non-releasable
   filters:
     branches:
@@ -115,8 +114,10 @@ workflows:
     jobs:
       - tf_state_checker:
           <<: *only-releasable
+          <<: *non-releasable
       - create_zip_file:
           <<: *only-releasable
+          <<: *non-releasable
           requires:
             - tf_state_checker
       - tf_provisioning:
