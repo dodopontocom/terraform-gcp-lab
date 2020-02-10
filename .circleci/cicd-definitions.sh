@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Gcloud project id
-export GCLOUD_PROJECT_ID="gcp-my-labs"
+export GCLOUD_PROJECT_ID="my-github-bot-project"
 
 # GCLOUD service account credentials path
 export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
