@@ -35,6 +35,7 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
     - run:
         name: "Validate tf state bucket "
         command: |
+          source .circleci/cicd-definitions.sh
           echo "Checking if GCP Bucket is created..."
           echo "bucket must be named as: ${TF_VAR_gcp_bucket}"
           if [[ ! -z ${TF_VAR_gcp_bucket} ]]; then
