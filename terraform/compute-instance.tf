@@ -12,7 +12,7 @@ resource "google_compute_instance" "gcp_lab_instance" {
   zone         = var.zone
 
   labels       = {
-    "env" = "var.compute_instance_environment"
+    "env" = "${var.compute_instance_environment}"
   }
   
   attached_disk {
