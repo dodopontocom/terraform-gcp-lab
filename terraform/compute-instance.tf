@@ -16,8 +16,8 @@ resource "google_compute_instance" "gcp_lab_instance" {
   }
   
   attached_disk {
-    source      = "${google_compute_disk.default_persistent_disk.name}"
-    device_name = "${google_compute_disk.default_persistent_disk.name}"
+    source      = google_compute_disk.default_persistent_disk.name
+    device_name = google_compute_disk.default_persistent_disk.name
   }
   
   boot_disk {
@@ -40,7 +40,7 @@ resource "google_compute_instance" "gcp_lab_instance" {
 
     access_config {
       // Include this section to give the VM an external ip address
-      nat_ip = "${google_compute_address.static_ip_address.address}"
+      nat_ip = google_compute_address.static_ip_address.address
     }
   }
 
@@ -61,7 +61,7 @@ resource "google_compute_firewall" "http-server" {
   target_tags   = ["http-server", "https-server"]
 }
 output "ip" {
-  value = "${google_compute_instance.gcp_lab_instance.network_interface.0.access_config.0.nat_ip}"
+  value = google_compute_instance.gcp_lab_instance.network_interface.0.access_config.0.nat_ip
 }
 
 resource "google_compute_disk" "default_persistent_disk" {
