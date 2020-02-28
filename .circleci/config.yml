@@ -37,9 +37,16 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
         command: |
           echo "Checking if GCP Bucket is created..."
           echo "bucket must be named as: ${TF_VAR_gcp_bucket}"
-          gsutil ls gs://${TF_VAR_gcp_bucket}/
-          echo "$?"
-          echo "Bucket step passed!"
+          if [[ ! -z ${TF_VAR_gcp_bucket} ]]; then
+            gsutil ls gs://${TF_VAR_gcp_bucket}/
+            if [[ "$?" -ne "0" ]]; then
+              exit -1
+            else
+              echo "Bucket step passed!"
+            fi
+          else
+            exit -1
+          fi
 create-function-zip-template: &create-function-zip-template
   machine: true
   steps:
