@@ -36,7 +36,9 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
         name: "Validate tf state bucket "
         command: |
           echo "Checking if GCP Bucket is created..."
+          echo "bucket must be named as: ${TF_VAR_gcp_bucket}"
           gsutil ls gs://${TF_VAR_gcp_bucket}/
+          echo "$?"
           echo "Bucket step passed!"
 create-function-zip-template: &create-function-zip-template
   machine: true
