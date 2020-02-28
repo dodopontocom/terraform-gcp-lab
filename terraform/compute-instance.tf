@@ -65,7 +65,7 @@ output "ip" {
 }
 
 resource "google_compute_disk" "default_persistent_disk" {
-  name                      = "${var.ssd_name}"
+  name                      = var.ssd_name
   type                      = "pd-ssd"
   size                      = "10"
   zone                      = "us-central1-a"
