@@ -41,9 +41,15 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
           if [[ ! -z ${TF_VAR_gcp_bucket} ]]; then
             gsutil ls gs://${TF_VAR_gcp_bucket}/
             if [[ "$?" -ne "0" ]]; then
-              exit -1
+              gsutil mb -c standard -p ${GCLOUD_PROJECT_ID} -l ${TF_VAR_region} gs://${TF_VAR_gcp_bucket}/
+              if [[ "$?" -ne "0" ]]; then
+                exit -1
+              else
+                echo "Bucket created "
+              fi
             else
               echo "Bucket step passed!"
+              echo "Bucket is already created..."
             fi
           else
             exit -1
