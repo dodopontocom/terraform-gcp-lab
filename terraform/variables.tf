@@ -26,4 +26,3 @@ variable "ssd_name" { }
 
 variable "TELEGRAM_TOKEN" { }
 variable "NOTIFICATION_IDS" { }
-
