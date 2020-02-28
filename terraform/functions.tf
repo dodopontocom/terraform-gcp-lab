@@ -7,7 +7,7 @@ resource "google_cloudfunctions_function" "function-start" {
   name                  = var.start_function_name
   description           = "Start VM function"
   runtime               = "nodejs8"
-  source_archive_bucket = var.gcp_bucket}
+  source_archive_bucket = var.gcp_bucket
   source_archive_object = "${google_storage_bucket_object.function_zip.name}"
   entry_point           = "startInstancePubSub"
 
