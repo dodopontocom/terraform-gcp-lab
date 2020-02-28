@@ -8,11 +8,11 @@ resource "google_compute_address" "static_ip_address" {
 
 resource "google_compute_instance" "gcp_lab_instance" {
   name         = "vm-tf-${random_id.instance_id.hex}"
-  machine_type = "${var.machine_type}"
-  zone         = "${var.zone}"
+  machine_type = var.machine_type
+  zone         = var.zone
 
   labels       = {
-    "env" = "${var.compute_instance_environment}"
+    "env" = "var.compute_instance_environment"
   }
   
   attached_disk {
@@ -22,7 +22,7 @@ resource "google_compute_instance" "gcp_lab_instance" {
   
   boot_disk {
     initialize_params {
-      image = "${var.ubuntu_image}"
+      image = var.ubuntu_image
     }
   }
   
