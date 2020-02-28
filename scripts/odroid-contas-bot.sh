@@ -17,6 +17,7 @@ cd ${project_name}
 
 #inject definitions properties
 echo -e '
+#!/bin/bash
 export TELEGRAM_TOKEN=$(curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/attributes/TELEGRAM_TOKEN)
 export NOTIFICATION_IDS=$(curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/attributes/NOTIFICATION_IDS)
 export PENDING_PEDIDO="/tmp/pedido.pending"
@@ -25,7 +26,8 @@ export BOT_BKP_PATH="/mnt/sdcard/telegram_bots_bkp"
 export CHAT_SIMPLE_REPLY="${BASEDIR}/texts/words.txt"
 export CENTRAL_OF_MESSAGES_FILE="${BASEDIR}/texts/central_of_messages.txt"
 export BOT_COMMANDS_LIST="${BASEDIR}/texts/commands_list.txt"
-export TRANSFER_FOLDER="odroid-bot"; export DODRONES_MOUNT_PATH="/mnt/hd1"
+export TRANSFER_FOLDER="odroid-bot"
+export DODRONES_MOUNT_PATH="/mnt/hd1"
 export DODRONES_DJI_PATH="${DODRONES_MOUNT_PATH}/DJI"
 export DODRONES_DJI_DEST_PATH="${DODRONES_DJI_PATH}/${TRANSFER_FOLDER}"
 export DODRONES_HOST="rodolfo@192.168.0.105"
@@ -41,6 +43,8 @@ export GNU_PLOT_ORIGINAL_SCRIPT="${BASEDIR}/configs/original_plot.gp"
 export GNU_PLOT_SCRIPT="${BASEDIR}/configs/plot.gp"
 export GNU_PLOT_IMAGE_OUTPUT="/tmp/temp_plot_image.png"
 export GNU_PLOT_DAT="${BASEDIR}/configs/test.dat"
+export TENDA_SUP_URL="https://www.tendaatacado.com.br"
+export PRECOS_GROUP_ID="-299957350"
 export STATS_LOG_PATH="/home/odroid/telegram_bots_logs/contas_"
 ' > .definitions.sh
 
