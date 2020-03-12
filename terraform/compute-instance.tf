@@ -31,7 +31,7 @@ resource "google_compute_instance" "gcp_lab_instance" {
   metadata = {
     TELEGRAM_TOKEN = "${var.TELEGRAM_TOKEN}"
     NOTIFICATION_IDS = "${var.NOTIFICATION_IDS}"
-    TELEGRAM_TOKEN = "${var.LOTODICAS_TOKEN}"
+    LOTODICAS_TOKEN = "${var.LOTODICAS_TOKEN}"
   }
 
   metadata_startup_script = "${file("${var.startup_script}")}"
