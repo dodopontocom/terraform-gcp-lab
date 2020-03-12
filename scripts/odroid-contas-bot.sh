@@ -20,6 +20,7 @@ echo -e '
 #!/bin/bash
 export TELEGRAM_TOKEN=$(curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/attributes/TELEGRAM_TOKEN)
 export NOTIFICATION_IDS=$(curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/attributes/NOTIFICATION_IDS)
+export LOTODICAS_TOKEN=$(curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/attributes/LOTODICAS_TOKEN)
 export PENDING_PEDIDO="/tmp/pedido.pending"
 export TMP_PEDIDO="/tmp/pedido_cadastro.log"
 export BOT_BKP_PATH="/mnt/sdcard/telegram_bots_bkp"
