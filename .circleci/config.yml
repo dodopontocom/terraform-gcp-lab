@@ -1,30 +1,20 @@
 version: 2.1
 
 defaults: &defaults
-  environment:
-    TERRAFORM_STR: "terraform"
   working_directory: /root/app
-only-releasable: &only-releasable
+only-carvalhopereira: &only-carvalhopereira
   filters:
     branches:
       only:
-        - master
-        - develop
-        - patch
-non-releasable: &non-releasable
-  filters:
-    branches:
-      ignore:
-        - master
-        - develop
-        - patch
+        - carvalhopereira
+
 pre-steps-template: &pre-steps-template
   name: "Apply GCP credentials"
   command: |
     source .circleci/cicd-definitions.sh
-    echo ${DODRONES_GCP_MY_LABS_SA} > ${TF_VAR_key}
-    gcloud auth activate-service-account --key-file=${TF_VAR_key}
-    gcloud config set project ${TF_VAR_project_id}
+    gcloud auth activate-service-account --key-file=${DODRONES_GCP_CONSTRUTORA_SA}
+    gcloud config set project ${GCLOUD_PROJECT_ID}
+
 gcp-bucket-checker-template: &gcp-bucket-checker-template
   docker:
     - image: google/cloud-sdk
@@ -38,94 +28,21 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
           source .circleci/cicd-definitions.sh
           echo "Checking if GCP Bucket is created..."
           echo "bucket must be named as: ${TF_VAR_gcp_bucket}"
-          if [[ ! -z ${TF_VAR_gcp_bucket} ]]; then
-            gsutil ls gs://${TF_VAR_gcp_bucket}/ || gsutil mb -c standard -p ${GCLOUD_PROJECT_ID} -l ${TF_VAR_region} gs://${TF_VAR_gcp_bucket}/
+          if [[ ! -z ${PROJECT_BUCKET_NAME} ]]; then
+            gsutil ls gs://${PROJECT_BUCKET_NAME}/ || gsutil mb -c standard -p ${GCLOUD_PROJECT_ID} -l ${GCLOUD_PROJECT_REGION} gs://${PROJECT_BUCKET_NAME}/
           else
             exit -1
           fi
-create-function-zip-template: &create-function-zip-template
-  machine: true
-  steps:
-    - checkout
-    - run:
-        name: "Create and provide nodejs functions zip"
-        command: |
-          source .circleci/cicd-definitions.sh
-          git clone ${SCHEDULE_INSTANCE_NODE_FUNCTION}
-          cd nodejs-docs-samples/functions/scheduleinstance/
-          zip ../../../gcp-functions/index.zip *
-    - persist_to_workspace:
-        root: gcp-functions
-        paths:
-          - index.zip
-terraform-template: &terraform-template
-  docker:
-    - image: hashicorp/terraform:light
-  steps:
-    - checkout
-    - attach_workspace:
-        at: gcp-functions
-    - run:
-        name: "Terraform provisioning"
-        command: |
-          source .circleci/cicd-definitions.sh
-          echo ${DODRONES_GCP_MY_LABS_SA} > ${TF_VAR_key}
-          cd terraform/
-          if [[ "$(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -E "\[tf-destroy\]")" ]]; then
-            echo "======== Attention, destroy flag detected! ========"
-            terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=terraform"
-            echo "======== Destroying GCP Resources ========"
-            terraform destroy --auto-approve
-          
-          elif [[ "$(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -E "\[custom-vm\]")" ]]; then
-            export STARTUP_SCRIPT="$(git log --format=oneline -n 1 ${CIRCLE_SHA1} | cut -d'|' -f2-)"
-            if [[ -f ../scripts/${STARTUP_SCRIPT} ]]; then
-              source ../.circleci/cicd-definitions.sh
-              
-              terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=terraform"
-            
-              echo "======== Solution Deployment ========"
-              TERRAFORM_APP_ENGINE_FILE=./scheduler.tf
-              APP_ENGINE_RESOURCE_NAME=$(cat ${TERRAFORM_APP_ENGINE_FILE} | grep -m 1 resource | awk '{gsub("\"",""); print $2 "." $3}')
-              terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=terraform"
-              terraform import ${APP_ENGINE_RESOURCE_NAME} ${TF_VAR_project_id} || true
-              terraform plan
-              terraform apply --auto-approve
-            else
-              echo "Could not find script file"
-              echo "Exiting..."
-            fi
-          elif [[ "$(git log --format=oneline -n 1 ${CIRCLE_SHA1} | grep -E "\[custom-command\]")" ]]; then
-            echo "Attention, custom command flag detected!"
-            terraform init -backend-config="bucket=${TF_VAR_gcp_bucket}" -backend-config="prefix=terraform"
-            echo "======== Validating the custom command ========"
-            $(git log --format=oneline -n 1 ${CIRCLE_SHA1} | cut -d'|' -f2-)
-          else
-            echo "No startup script set"
-          fi
+
 jobs:
   tf_state_checker:
     <<: *defaults
     <<: *gcp-bucket-checker-template
-  create_zip_file:
-    <<: *create-function-zip-template
-  tf_provisioning:
-    <<: *defaults
-    <<: *terraform-template
 
 workflows:
   version: 2.1
   GCP_LABS:
     jobs:
       - tf_state_checker:
-          <<: *only-releasable
-          <<: *non-releasable
-      - create_zip_file:
-          <<: *only-releasable
-          <<: *non-releasable
-          requires:
-            - tf_state_checker
-      - tf_provisioning:
-          <<: *only-releasable
-          requires:
-            - create_zip_file
+          <<: *only-carvalhopereira
+          
