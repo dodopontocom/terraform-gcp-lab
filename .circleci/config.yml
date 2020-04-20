@@ -29,6 +29,7 @@ pre-steps-template: &pre-steps-template
           else
             exit -1
           fi
+gcp-bucket-checker-template: &gcp-bucket-checker-template
   docker:
     - image: google/cloud-sdk
   steps:
