@@ -4,9 +4,9 @@
 export GCLOUD_PROJECT_ID="construtora-2020"
 
 # GCLOUD service account credentials path
-export GOOGLE_APPLICATION_CREDENTIALS=${DODRONES_GCP_CONSTRUTORA_SA}
-
-export PROJECT_BUCKET_NAME="www.construtoracarvalhopereira.com.br"
+export GOOGLE_APPLICATION_CREDENTIALS=${GCLOUD_JSON_KEY_PATH}
+export GCLOUD_JSON_KEY_PATH="${CIRCLE_WORKING_DIRECTORY}/credentials/credential.json"
+export GCLOUD_PROJECT_BUCKET_NAME="www.construtoracarvalhopereira.com.br"
 export GCLOUD_PROJECT_REGION="southamerica-east1"
 
 # Google Nodejs Schedule instance sample clone url
@@ -24,7 +24,6 @@ export TF_VAR_ubuntu_image="ubuntu-os-cloud/ubuntu-1804-lts"
 export TF_VAR_startup_script="${CIRCLE_WORKING_DIRECTORY}/scripts/${STARTUP_SCRIPT}"
 export TF_VAR_ssd_name="data-ssd"
 
-export TF_VAR_key="${CIRCLE_WORKING_DIRECTORY}/credentials/credential.json"
 export TF_VAR_start_topic="start-instance-event"
 export TF_VAR_stop_topic="stop-instance-event"
 export TF_VAR_start_function_name="startInstancePubSub"
