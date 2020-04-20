@@ -27,7 +27,7 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
         command: |
           source .circleci/cicd-definitions.sh
           echo "Checking if GCP Bucket is created..."
-          echo "bucket must be named as: ${TF_VAR_gcp_bucket}"
+          echo "bucket must be named as: ${PROJECT_BUCKET_NAME}"
           if [[ ! -z ${PROJECT_BUCKET_NAME} ]]; then
             gsutil ls gs://${PROJECT_BUCKET_NAME}/ || gsutil mb -c standard -p ${GCLOUD_PROJECT_ID} -l ${GCLOUD_PROJECT_REGION} gs://${PROJECT_BUCKET_NAME}/
           else
