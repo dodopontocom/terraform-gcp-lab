@@ -1,10 +1,13 @@
 #!/bin/bash
 
 # Gcloud project id
-export PROJECT_ID="construtora-2020"
+export GCLOUD_PROJECT_ID="construtora-2020"
 
 # GCLOUD service account credentials path
-export GOOGLE_APPLICATION_CREDENTIALS=${TF_VAR_key}
+export GOOGLE_APPLICATION_CREDENTIALS=${DODRONES_GCP_CONSTRUTORA_SA}
+
+export PROJECT_BUCKET_NAME="www.construtoracarvalhopereira.com.br"
+export GCLOUD_PROJECT_REGION="southamerica-east1"
 
 # Google Nodejs Schedule instance sample clone url
 export SCHEDULE_INSTANCE_NODE_FUNCTION="https://github.com/GoogleCloudPlatform/nodejs-docs-samples.git"
