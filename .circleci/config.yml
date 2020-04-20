@@ -22,10 +22,13 @@ pre-steps-template: &pre-steps-template
   name: "Apply GCP credentials"
   command: |
     source .circleci/cicd-definitions.sh
-    echo ${DODRONES_GCP_MY_LABS_SA} > ${GCLOUD_JSON_KEY_PATH}
-    gcloud auth activate-service-account --key-file=${GCLOUD_JSON_KEY_PATH}
-    gcloud config set project ${TF_VAR_project_id}
-gcp-bucket-checker-template: &gcp-bucket-checker-template
+          echo "Checking if GCP Bucket is created..."
+          echo "bucket must be named as: ${TF_VAR_gcp_bucket}"
+          if [[ ! -z ${TF_VAR_gcp_bucket} ]]; then
+            gsutil ls gs://${TF_VAR_gcp_bucket}/ || gsutil mb -c standard -p ${GCLOUD_PROJECT_ID} -l ${TF_VAR_region} gs://${TF_VAR_gcp_bucket}/
+          else
+            exit -1
+          fi
   docker:
     - image: google/cloud-sdk
   steps:
