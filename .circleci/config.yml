@@ -11,9 +11,9 @@ only-carvalhopereira: &only-carvalhopereira
 pre-steps-template: &pre-steps-template
   name: "Apply GCP credentials"
   command: |
-    echo ${DODRONES_GCP_MY_LABS_SA} > ${TF_VAR_key}
     source .circleci/cicd-definitions.sh
-    gcloud auth activate-service-account --key-file=${DODRONES_GCP_CONSTRUTORA_SA}
+    echo ${DODRONES_GCP_MY_LABS_SA} > ${GCLOUD_JSON_KEY_PATH}
+    gcloud auth activate-service-account --key-file=${GCLOUD_JSON_KEY_PATH}
     gcloud config set project ${GCLOUD_PROJECT_ID}
 
 gcp-bucket-checker-template: &gcp-bucket-checker-template
