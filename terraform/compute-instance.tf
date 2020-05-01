@@ -1,5 +1,5 @@
 resource "random_id" "instance_id" {
-  byte_length = 4
+  byte_length = 3
 }
 
 resource "google_compute_address" "static_ip_address" {
