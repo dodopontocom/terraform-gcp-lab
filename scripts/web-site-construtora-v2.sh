@@ -26,9 +26,9 @@ echo n | npm install -g --silent @angular/cli
 
 #clone odroid-contas repository
 git clone ${git_clone_url}
-# cd ${project_name}
+cd ${project_name}
 
-npm install
+echo n | npm install
 ng serve &
 
 # #inject definitions properties
