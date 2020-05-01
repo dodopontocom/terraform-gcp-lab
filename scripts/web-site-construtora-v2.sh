@@ -29,7 +29,7 @@ git clone ${git_clone_url}
 cd ${project_name}
 
 echo n | npm install
-ng serve &
+ng serve --host 0.0.0.0 &
 
 # #inject definitions properties
 # echo -e '
