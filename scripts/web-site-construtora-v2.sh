@@ -22,6 +22,7 @@ sudo apt-get install -y docker-ce
 curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
+echo n | npm install -g --silent --save express
 echo n | npm install -g --silent @angular/cli
 
 #clone odroid-contas repository
