@@ -5,7 +5,13 @@ git_clone_url="https://github.com/dodopontocom/${project_name}.git"
 
 #install docker
 sudo apt-get update
-sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+sudo apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common \
+    mongodb \
+    npm
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
@@ -13,9 +19,17 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 sudo apt-get update
 sudo apt-get install -y docker-ce
 
+curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+echo n | npm install -g --silent @angular/cli
+
 #clone odroid-contas repository
 git clone ${git_clone_url}
 # cd ${project_name}
+
+npm install
+ng serve &
 
 # #inject definitions properties
 # echo -e '
