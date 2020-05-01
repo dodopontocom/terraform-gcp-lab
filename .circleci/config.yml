@@ -21,14 +21,11 @@ non-releasable: &non-releasable
 pre-steps-template: &pre-steps-template
   name: "Apply GCP credentials"
   command: |
-    source .circleci/cicd-definitions.sh
-          echo "Checking if GCP Bucket is created..."
-          echo "bucket must be named as: ${TF_VAR_gcp_bucket}"
-          if [[ ! -z ${TF_VAR_gcp_bucket} ]]; then
-            gsutil ls gs://${TF_VAR_gcp_bucket}/ || gsutil mb -c standard -p ${GCLOUD_PROJECT_ID} -l ${TF_VAR_region} gs://${TF_VAR_gcp_bucket}/
-          else
-            exit -1
-          fi
+          source .circleci/cicd-definitions.sh
+          echo ${DODRONES_GCP_MY_LABS_SA} > ${TF_VAR_key}
+          gcloud auth activate-service-account --key-file=${TF_VAR_key}
+          gcloud config set project ${GCLOUD_PROJECT_ID}
+          
 gcp-bucket-checker-template: &gcp-bucket-checker-template
   docker:
     - image: google/cloud-sdk
@@ -47,6 +44,7 @@ gcp-bucket-checker-template: &gcp-bucket-checker-template
           else
             exit -1
           fi
+          
 create-function-zip-template: &create-function-zip-template
   machine: true
   steps:
@@ -58,6 +56,7 @@ create-function-zip-template: &create-function-zip-template
           git clone ${SCHEDULE_INSTANCE_NODE_FUNCTION}
           cd nodejs-docs-samples/functions/scheduleinstance/
           zip ../../../gcp-functions/index.zip *
+          
     - persist_to_workspace:
         root: gcp-functions
         paths:
@@ -107,6 +106,7 @@ terraform-template: &terraform-template
           else
             echo "No startup script set"
           fi
+          
 jobs:
   tf_state_checker:
     <<: *defaults
