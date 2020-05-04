@@ -66,6 +66,5 @@ ng serve --host 0.0.0.0 &
 # export STATS_LOG_PATH="/home/odroid/telegram_bots_logs/contas_"
 # ' > .definitions.sh
 
-# #run bot in docker
 # sudo docker build -t bot .
 # sudo docker run -i --restart unless-stopped --name bot bot
