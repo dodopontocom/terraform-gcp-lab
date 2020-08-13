@@ -40,3 +40,7 @@ $ git commit -m "[custom-command] | terraform init"
 ```
 
 [custom-vm]|script_name.sh
+
+# References
+https://cloud.google.com/scheduler/docs/start-and-stop-compute-engine-instances-on-a-schedule  
+https://www.terraform.io/docs/providers/google/index.html
